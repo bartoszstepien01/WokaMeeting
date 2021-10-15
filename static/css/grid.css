@@ -1,2 +1,0 @@
-body{align-items:center;background-color:#1c1c1e;height:100vh;margin:0}#gallery,body{display:flex;justify-content:center}#gallery{flex-wrap:wrap;max-width:calc(var(--width)*var(--cols))}.video-container{background-color:#3a3a3e;height:var(--height);width:var(--width)}video{height:100%;width:100%}
-/*# sourceMappingURL=index.15f4c2f4.css.map */

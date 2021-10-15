@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import Gallery from "$lib/Gallery.svelte";
 
-	let video;
+	let streams = [];
 
 	onMount(async() => {
 		window.dispatchEvent(new Event('resize'));
@@ -12,20 +13,29 @@
 		let peer = new Peer();
 		let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
-		video.srcObject = stream;
+		streams = [stream];
 	});
 </script>
 
 <svelte:head>
 	<title>Home</title>
-	<link rel="stylesheet" href="/css/grid.css">
 	<script>
 		let parcelRequire;
 	</script>
 </svelte:head>
 
-<div id="gallery">
-	<div class="video-container">
-		<video autoplay muted bind:this={video}></video>
-	</div>
-</div>
+{#if streams.length !== 0}
+	<Gallery streams={streams}/>
+{/if}
+
+<style>
+	:global(body) {
+		margin: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100vh;
+
+		background-color: #1c1c1e;
+	}
+</style>
