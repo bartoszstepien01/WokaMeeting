@@ -5,8 +5,6 @@
 	let streams = [];
 
 	onMount(async() => {
-		window.dispatchEvent(new Event('resize'));
-
 		const peerjs = await import("peerjs");
 		const Peer = peerjs.default;
 
