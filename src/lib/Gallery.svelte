@@ -4,6 +4,10 @@
   import Video from "./Video.svelte";
 
   export let streams: Array<MediaStream>;
+  $: { 
+    streams; 
+    recalculateLayout(); 
+  }
 
   let gallery: HTMLDivElement;
   let videoWidth: number;
