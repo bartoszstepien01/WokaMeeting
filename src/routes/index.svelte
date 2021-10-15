@@ -1,2 +1,27 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import { onMount } from "svelte";
+
+	let video;
+
+	onMount(async() => {
+		const peerjs = await import("peerjs");
+		const Peer = peerjs.default;
+
+		let peer = new Peer();
+		let stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+
+		video.srcObject = stream;
+		video.play();
+	});
+</script>
+
+<svelte:head>
+	<title>Home</title>
+	<script>
+		let parcelRequire;
+	</script>
+</svelte:head>
+
+<video bind:this={video}>
+	<track kind="captions">
+</video>
