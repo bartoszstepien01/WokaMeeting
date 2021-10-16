@@ -15,6 +15,8 @@
 
 		streams = [stream];
 
+		console.log(room);
+
 		let call = peer.call(room, stream);
 
 		call.on("stream", (stream) => {
