@@ -9,19 +9,19 @@
 		const peerjs = await import("peerjs");
 		const Peer = peerjs.default;
 
-		let peer = new Peer();
-		let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-
-		streams = [stream];
-
 		let url = new URL(window.location.href);
+		let peer = new Peer();
 
 		peer.on("open", () => {
-			let call = peer.call(url.searchParams.get("room"), stream);
+			navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+				streams = [stream];
+				
+				let call = peer.call(url.searchParams.get("room"), stream);
 
-			call.on("stream", (stream) => {
-				if(streams.map(stream => stream.id).includes(stream.id)) return;
-				streams = [...streams, stream];
+				call.on("stream", (stream) => {
+					if(streams.map(stream => stream.id).includes(stream.id)) return;
+					streams = [...streams, stream];
+				});
 			});
 		});
 	});

@@ -10,20 +10,21 @@
 		const Peer = peerjs.default;
 
 		let peer = new Peer();
-		let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-
-		streams = [stream];
 
 		peer.on("open", (id) => {
 			console.log(id);
 		});
 
 		peer.on("call", (call) => {
-			call.answer(stream);
+			navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+				streams = [stream];
 
-			call.on("stream", (stream) => {
-				if(streams.map(stream => stream.id).includes(stream.id)) return;
-				streams = [...streams, stream];
+				call.answer(stream);
+
+				call.on("stream", (stream) => {
+					if(streams.map(stream => stream.id).includes(stream.id)) return;
+					streams = [...streams, stream];
+				});
 			});
 		});
 	});
