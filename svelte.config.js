@@ -13,7 +13,7 @@ const config = {
 		adapter: static_adapter(),
 		paths: {
 			base: '/WokaMeeting',
-			assets: '/WokaMeeting'
+			assets: 'https://bartoszstepien01.github.io/WokaMeeting'
 		},
 		appDir: 'internal'
 	}
