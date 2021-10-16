@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { page } from "$app/stores";
 	import { onMount } from "svelte";
 	import Gallery from "$lib/Gallery.svelte";
 
-	let room = $page.query.get("room");
 	let streams: Array<MediaStream> = [];
 
 	onMount(async() => {
@@ -15,9 +13,8 @@
 
 		streams = [stream];
 
-		console.log(room);
-
-		let call = peer.call(room, stream);
+		let url = new URL(window.location.href);
+		let call = peer.call(url.searchParams.get("room"), stream);
 
 		call.on("stream", (stream) => {
 			// if(streams.map(stream => stream.id).includes(stream.id)) return;
