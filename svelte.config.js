@@ -12,7 +12,8 @@ const config = {
 		target: '#svelte',
 		adapter: static_adapter(),
 		paths: {
-			base: '/WokaMeeting'
+			base: '/WokaMeeting',
+			assets: 'https://bartoszstepien01.github.io/WokaMeeting'
 		}
 	}
 };
