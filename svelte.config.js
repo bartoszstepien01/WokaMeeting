@@ -12,7 +12,7 @@ const config = {
 		target: '#svelte',
 		adapter: static_adapter(),
 		paths: {
-			base: 'WokaMeeting',
+			base: '/WokaMeeting',
 		},
 		appDir: 'internal'
 	}
