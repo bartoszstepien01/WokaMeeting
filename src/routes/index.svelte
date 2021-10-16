@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { base } from "$app/paths";
 	import Gallery from "$lib/Gallery.svelte";
 
 	let streams: Array<MediaStream> = [];
@@ -29,6 +30,8 @@
 </script>
 
 <svelte:head>
+	<link rel="icon" href="{ base }/favicon.png" />
+	<link rel="manifest" href="{ base }/manifest.json">
 	<title>Home</title>
 	<script>
 		let parcelRequire;
