@@ -21,7 +21,7 @@
 			call.answer(stream);
 
 			call.on("stream", (stream) => {
-				// if(streams.map(stream => stream.id).includes(stream.id)) return;
+				if(streams.map(stream => stream.id).includes(stream.id)) return;
 				streams = [...streams, stream];
 			});
 		});
