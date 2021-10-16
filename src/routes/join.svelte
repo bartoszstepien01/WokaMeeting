@@ -15,11 +15,14 @@
 		streams = [stream];
 
 		let url = new URL(window.location.href);
-		let call = peer.call(url.searchParams.get("room"), stream);
 
-		call.on("stream", (stream) => {
-			if(streams.map(stream => stream.id).includes(stream.id)) return;
-			streams = [...streams, stream];
+		peer.on("open", () => {
+			let call = peer.call(url.searchParams.get("room"), stream);
+
+			call.on("stream", (stream) => {
+				if(streams.map(stream => stream.id).includes(stream.id)) return;
+				streams = [...streams, stream];
+			});
 		});
 	});
 </script>
