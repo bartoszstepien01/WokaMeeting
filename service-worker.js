@@ -1,17 +1,17 @@
-const timestamp = 1634398381513;
+const timestamp = 1634399299376;
 const build = [
-  "/WokaMeeting/internal/start-b78071d6.js",
-  "/WokaMeeting/internal/assets/start-61d1577b.css",
-  "/WokaMeeting/internal/layout.svelte-c5b5367b.js",
-  "/WokaMeeting/internal/error.svelte-c116663f.js",
-  "/WokaMeeting/internal/pages/index.svelte-e37edbf3.js",
-  "/WokaMeeting/internal/assets/pages/index.svelte-bccd3b37.css",
-  "/WokaMeeting/internal/pages/join.svelte-f1929707.js",
-  "/WokaMeeting/internal/chunks/vendor-5dfe71dc.js",
-  "/WokaMeeting/internal/chunks/preload-helper-257aa4c1.js",
-  "/WokaMeeting/internal/chunks/Gallery-df3fa11a.js",
-  "/WokaMeeting/internal/assets/Gallery-59c7a0ee.css",
-  "/WokaMeeting/internal/chunks/peerjs.min-13412648.js"
+  "/WokaMeeting/_app/start-f1a284b3.js",
+  "/WokaMeeting/_app/assets/start-61d1577b.css",
+  "/WokaMeeting/_app/layout.svelte-c5b5367b.js",
+  "/WokaMeeting/_app/error.svelte-c116663f.js",
+  "/WokaMeeting/_app/pages/index.svelte-c27c7042.js",
+  "/WokaMeeting/_app/assets/pages/join.svelte-8a68f74c.css",
+  "/WokaMeeting/_app/pages/join.svelte-9e885049.js",
+  "/WokaMeeting/_app/chunks/vendor-5dfe71dc.js",
+  "/WokaMeeting/_app/chunks/preload-helper-549b4fe8.js",
+  "/WokaMeeting/_app/chunks/Gallery-df3fa11a.js",
+  "/WokaMeeting/_app/assets/Gallery-59c7a0ee.css",
+  "/WokaMeeting/_app/chunks/peerjs.min-13412648.js"
 ];
 const files = [
   "/WokaMeeting/favicon.png",
