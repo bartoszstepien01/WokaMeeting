@@ -9,6 +9,9 @@
 		const peerjs = await import("peerjs");
 		const Peer = peerjs.default;
 
+		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+		streams = [stream];
+
 		let peer = new Peer(undefined, {config: {
 			iceServers: [
 				{urls: 'stun:stun.l.google.com:19302'},
@@ -21,15 +24,11 @@
 		});
 
 		peer.on("call", (call) => {
-			navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
-				streams = [stream];
+			call.answer(stream);
 
-				call.answer(stream);
-
-				call.on("stream", (stream) => {
-					if(streams.map(stream => stream.id).includes(stream.id)) return;
-					streams = [...streams, stream];
-				});
+			call.on("stream", (stream) => {
+				if(streams.map(stream => stream.id).includes(stream.id)) return;
+				streams = [...streams, stream];
 			});
 		});
 	});
