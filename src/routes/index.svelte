@@ -9,7 +9,12 @@
 		const peerjs = await import("peerjs");
 		const Peer = peerjs.default;
 
-		let peer = new Peer();
+		let peer = new Peer(undefined, {config: {
+			iceServers: [
+				{urls: 'stun:stun.l.google.com:19302'},
+				{urls: "turn:numb.viagenie.ca", credential: "muazkh", username: "webrtc@live.com"}
+			]
+		}});
 
 		peer.on("open", (id) => {
 			console.log(id);

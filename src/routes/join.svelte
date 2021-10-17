@@ -10,7 +10,12 @@
 		const Peer = peerjs.default;
 
 		let url = new URL(window.location.href);
-		let peer = new Peer();
+		let peer = new Peer(undefined, {config: {
+			iceServers: [
+				{urls: 'stun:stun.l.google.com:19302'},
+				{urls: "turn:numb.viagenie.ca", credential: "muazkh", username: "webrtc@live.com"}
+			]
+		}});
 
 		peer.on("open", () => {
 			navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
