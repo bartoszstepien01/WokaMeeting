@@ -4,6 +4,7 @@
 	import Gallery from "$lib/Gallery.svelte";
 
 	let streams: Array<MediaStream> = [];
+	let peers: Array<string> = [];
 
 	onMount(async() => {
 		const peerjs = await import("peerjs");
@@ -20,15 +21,27 @@
 			]
 		}});
 
-		peer.on("open", () => {			
+		peer.on("open", (id) => {	
+			peers = [id];		
 			let call = peer.call(url.searchParams.get("room"), stream);
+
+			peers = [...peers, call.peer];
 
 			call.on("stream", (stream) => {
 				if(streams.map(stream => stream.id).includes(stream.id)) return;
 				streams = [...streams, stream];
 			});
 
-			peer.connect(url.searchParams.get("room"));
+			let conn = peer.connect(url.searchParams.get("room"));
+
+			conn.on("close", () => {
+				streams = streams.filter((stream, index) => peers[index] != conn.peer);
+				peers = peers.filter((peer) => peer != conn.peer);
+			});
+
+			window.onbeforeunload = () => {
+				conn.close();
+			}
 		});
 	});
 </script>
