@@ -39,7 +39,7 @@
 				peers = peers.filter((peer) => peer != conn.peer);
 			});
 
-			window.onbeforeunload = () => {
+			window.onunload = window.onbeforeunload = () => {
 				conn.close();
 			}
 		});
