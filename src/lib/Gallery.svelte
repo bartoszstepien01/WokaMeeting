@@ -36,8 +36,8 @@
 <svelte:window on:resize={ recalculateLayout }/>
 
 <div bind:this={ gallery } id="gallery" style="--width: { videoWidth }px; --cols: { galleryColumns };">
-  {#each streams as stream}
-    <Video width={ videoWidth } height={ videoHeight } stream={ stream }/>
+  {#each streams as stream, i}
+    <Video width={ videoWidth } height={ videoHeight } stream={ stream } muted={i == 0}/>
   {/each}
 </div>
 

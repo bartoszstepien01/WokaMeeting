@@ -2,6 +2,7 @@
 	export let width: number;
 	export let height: number;
 	export let stream: MediaStream;
+	export let muted: boolean = false;
 
 	function srcObject(node, stream) {
 		node.srcObject = stream;
@@ -12,7 +13,7 @@
 </script>
 
 <div class="video-container" style="--width: { width }px; --height: { height }px;">
-	<video autoplay muted use:srcObject={ stream }>
+	<video autoplay muted={ muted } use:srcObject={ stream }>
 		<track kind="captions">
 	</video>
 </div>
