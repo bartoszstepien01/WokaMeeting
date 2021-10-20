@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import { base } from "$app/paths";
 	import Gallery from "$lib/Gallery.svelte";
+	import type Peer from "peerjs";
 
 	let streams: Array<MediaStream> = [];
 	let peers: Array<string> = [];
@@ -21,9 +22,8 @@
 			]
 		}});
 
-		peer.on("open", (id) => {	
-			peers = [id];		
-			let call = peer.call(url.searchParams.get("room"), stream);
+		let connectTo = (peerId: string) => {
+			let call = peer.call(peerId, stream);
 
 			peers = [...peers, call.peer];
 
@@ -32,17 +32,54 @@
 				streams = [...streams, stream];
 			});
 
+			return call;
+		};
+
+		let closeConnection = (peerId: string) => {
+			streams = streams.filter((stream, index) => peers[index] != peerId);
+			peers = peers.filter((peer) => peer != peerId);
+		};
+
+		peer.on("open", (id) => {	
+			peers = [id];
+
+			connectTo(url.searchParams.get("room"));		
+
 			let conn = peer.connect(url.searchParams.get("room"));
 
+			conn.on("data", (data) => {
+				switch(data.type) {
+					case "connect":
+						connectTo(data.data.peerId);
+						break;
+					case "disconnect":
+						closeConnection(data.data.peerId);
+						break;
+					default:
+						break;
+				}
+			});
+
 			conn.on("close", () => {
-				streams = streams.filter((stream, index) => peers[index] != conn.peer);
-				peers = peers.filter((peer) => peer != conn.peer);
+				closeConnection(conn.peer);
 			});
 
 			window.onunload = window.onbeforeunload = () => {
 				conn.close();
 			}
 		});
+
+		peer.on("call", (call) => {
+			peers = [...peers, call.peer];
+			call.answer(stream);
+
+			call.on("stream", (stream) => {
+				if(streams.map(stream => stream.id).includes(stream.id)) return;
+				streams = [...streams, stream];
+			});
+		});
+
+		peer.on("connection", (conn) => conn.close());
 	});
 </script>
 

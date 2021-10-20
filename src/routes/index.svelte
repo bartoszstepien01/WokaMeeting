@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import { base } from "$app/paths";
 	import Gallery from "$lib/Gallery.svelte";
+	import type Peer from 'peerjs';
 
 	let streams: Array<MediaStream> = [];
 	let peers: Array<string> = [];
@@ -12,6 +13,8 @@
 
 		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 		streams = [stream];
+
+		let connections: Array<Peer.DataConnection> = [];
 
 		let peer = new Peer(undefined, {config: {
 			iceServers: [
@@ -36,9 +39,32 @@
 		});
 
 		peer.on("connection", (conn) => {
+			conn.on("open", () => {
+				connections.forEach((arrConn) => {
+					arrConn.send({
+						type: "connect",
+						data: {
+							peerId: conn.peer
+						}
+					});
+				});
+
+				connections.push(conn);
+			});
+
 			conn.on("close", () => {
+				connections = connections.filter((arrConn) => arrConn != conn);
 				streams = streams.filter((stream, index) => peers[index] != conn.peer);
 				peers = peers.filter((peer) => peer != conn.peer);
+
+				connections.forEach((arrConn) => {
+					arrConn.send({
+						type: "disconnect",
+						data: {
+							peerId: conn.peer
+						}
+					});
+				});
 			});
 
 			window.onunload = window.onbeforeunload = () => {
