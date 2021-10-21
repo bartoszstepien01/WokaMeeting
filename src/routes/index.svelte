@@ -86,7 +86,7 @@
 {#if streams.length !== 0}
 	<Gallery streams={streams}/>
 {/if}
-
+<!-- 
 <style>
 	:global(body) {
 		margin: 0;
@@ -97,4 +97,4 @@
 
 		background-color: #1c1c1e;
 	}
-</style>
+</style> -->

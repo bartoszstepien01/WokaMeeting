@@ -96,7 +96,7 @@
 	<Gallery streams={streams}/>
 {/if}
 
-<style>
+<!-- <style>
 	:global(body) {
 		margin: 0;
 		display: flex;
@@ -106,4 +106,4 @@
 
 		background-color: #1c1c1e;
 	}
-</style>
+</style> -->
