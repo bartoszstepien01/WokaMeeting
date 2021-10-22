@@ -4,8 +4,14 @@
 	import Gallery from "$lib/Gallery.svelte";
 	import type Peer from 'peerjs';
 
+	import Fa from "svelte-fa";
+	import { faVideo, faMicrophone, faDesktop, faComment, faUsers, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+
+	const zeroPad = (num, places) => String(num).padStart(places, '0');
+
 	let streams: Array<MediaStream> = [];
 	let peers: Array<string> = [];
+	let secondsSinceStart: number = 0;
 
 	onMount(async() => {
 		const peerjs = await import("peerjs");
@@ -26,6 +32,8 @@
 		peer.on("open", (id) => {
 			console.log(id);
 			peers = [id];
+
+			setInterval(() => secondsSinceStart++, 1000);
 		});
 
 		peer.on("call", (call) => {
@@ -84,8 +92,30 @@
 </svelte:head>
 
 
-<div class="w-screen bg-gray-700 h-16">
-
+<div class="flex w-screen bg-gray-700 h-16 px-8 items-center">
+	<p class="text-white">{#if Math.floor(secondsSinceStart / 60) >= 60}{ zeroPad(Math.floor(secondsSinceStart / 3600), 2) }:{/if}{ zeroPad(Math.floor(secondsSinceStart / 60) % 60, 2) }:{ zeroPad(secondsSinceStart % 60, 2) }</p>
+	<div class="flex ml-auto gap-4">
+		<button>
+			<Fa icon={faVideo} color="#ffffff" size="lg"/>
+		</button>
+		<button>
+			<Fa icon={faMicrophone} color="#ffffff" size="lg"/>
+		</button>
+		<button>
+			<Fa icon={faDesktop} color="#ffffff" size="lg"/>
+		</button>
+		<div class="border border-gray-500"/>
+		<button>
+			<Fa icon={faComment} color="#ffffff" size="lg"/>
+		</button>
+		<button>
+			<Fa icon={faUsers} color="#ffffff" size="lg"/>
+		</button>
+		<div class="border border-gray-500"/>
+		<button>
+			<Fa icon={faEllipsisV} color="#ffffff" size="lg"/>
+		</button>
+	</div>
 </div>
 
 {#if streams.length !== 0}
