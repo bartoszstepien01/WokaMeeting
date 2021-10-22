@@ -12,8 +12,8 @@
   	};
 </script>
 
-<div class="video-container bg-gray-700" style="--width: { width }px; --height: { height }px;">
-	<video autoplay muted={ muted } class="w-full h-full" use:srcObject={ stream }>
+<div class="video-container bg-gray-700 rounded-xl" style="--width: { width }px; --height: { height }px;">
+	<video autoplay muted={ muted } class="w-full h-full rounded-xl" use:srcObject={ stream }>
 		<track kind="captions">
 	</video>
 </div>

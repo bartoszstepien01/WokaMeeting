@@ -12,22 +12,20 @@
   let gallery: HTMLDivElement;
   let videoWidth: number;
   let videoHeight: number;
-  let galleryColumns: number;
 
 	function recalculateLayout() {
     const aspectRatio = [16, 9];
     const videoCount = streams.length;
 
     const { width, height, cols } = largestRect(
-      document.body.clientWidth,
-      document.body.clientHeight,
+      document.body.clientWidth - 64 - 16 * (videoCount - 1),
+      document.body.clientHeight - 64 - 64 - 16 * (videoCount - 1),
       videoCount,
       ...aspectRatio
     );
 
     videoWidth = width;
     videoHeight = height;
-    galleryColumns = cols;
   }
 
   onMount(recalculateLayout);
@@ -35,14 +33,8 @@
 
 <svelte:window on:resize={ recalculateLayout }/>
 
-<div id="gallery" class="flex justify-center flex-wrap" style="--width: { videoWidth }px; --cols: { galleryColumns };" bind:this={ gallery }>
+<div id="gallery" class="flex justify-center items-center flex-wrap w-full h-full px-8 py-8 gap-4" bind:this={ gallery }>
   {#each streams as stream, i}
     <Video width={ videoWidth } height={ videoHeight } stream={ stream } muted={i == 0}/>
   {/each}
 </div>
-
-<style>
-  #gallery {
-    max-width: calc(var(--width) * var(--cols));
-  }
-</style>

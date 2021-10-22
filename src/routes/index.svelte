@@ -83,6 +83,11 @@
 	</script>
 </svelte:head>
 
+
+<div class="w-screen bg-gray-700 h-16">
+
+</div>
+
 {#if streams.length !== 0}
 	<Gallery streams={streams}/>
 {/if}
