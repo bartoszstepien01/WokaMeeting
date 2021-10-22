@@ -2,7 +2,6 @@
 	import { onMount } from "svelte";
 	import { base } from "$app/paths";
 	import Gallery from "$lib/Gallery.svelte";
-	import type Peer from "peerjs";
 
 	let streams: Array<MediaStream> = [];
 	let peers: Array<string> = [];
@@ -95,15 +94,3 @@
 {#if streams.length !== 0}
 	<Gallery streams={streams}/>
 {/if}
-
-<!-- <style>
-	:global(body) {
-		margin: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 100vh;
-
-		background-color: #1c1c1e;
-	}
-</style> -->

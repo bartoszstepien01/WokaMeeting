@@ -35,7 +35,7 @@
 
 <svelte:window on:resize={ recalculateLayout }/>
 
-<div bind:this={ gallery } id="gallery" style="--width: { videoWidth }px; --cols: { galleryColumns };">
+<div id="gallery" class="flex justify-center flex-wrap" style="--width: { videoWidth }px; --cols: { galleryColumns };" bind:this={ gallery }>
   {#each streams as stream, i}
     <Video width={ videoWidth } height={ videoHeight } stream={ stream } muted={i == 0}/>
   {/each}
@@ -43,9 +43,6 @@
 
 <style>
   #gallery {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
     max-width: calc(var(--width) * var(--cols));
   }
 </style>
