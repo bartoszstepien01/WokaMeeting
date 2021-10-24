@@ -12,6 +12,7 @@
 	let streams: Array<MediaStream> = [];
 	let peers: Array<string> = [];
 	let secondsSinceStart: number = 0;
+	let calls: Array<Peer.MediaConnection> = [];
 
 	onMount(async() => {
 		const peerjs = await import("peerjs");
@@ -38,11 +39,14 @@
 
 		peer.on("call", (call) => {
 			peers = [...peers, call.peer];
+			calls = [...calls, call];
 			call.answer(stream);
 
 			call.on("stream", (stream) => {
 				if(streams.map(stream => stream.id).includes(stream.id)) return;
 				streams = [...streams, stream];
+
+				console.log(call.peerConnection.getSenders());
 			});
 		});
 
@@ -64,6 +68,7 @@
 				connections = connections.filter((arrConn) => arrConn != conn);
 				streams = streams.filter((stream, index) => peers[index] != conn.peer);
 				peers = peers.filter((peer) => peer != conn.peer);
+				calls = calls.filter((call) => call.peer != conn.peer);
 
 				connections.forEach((arrConn) => {
 					arrConn.send({
@@ -94,26 +99,40 @@
 
 <div class="flex w-screen bg-gray-700 h-16 px-8 items-center">
 	<p class="text-white">{#if Math.floor(secondsSinceStart / 60) >= 60}{ zeroPad(Math.floor(secondsSinceStart / 3600), 2) }:{/if}{ zeroPad(Math.floor(secondsSinceStart / 60) % 60, 2) }:{ zeroPad(secondsSinceStart % 60, 2) }</p>
-	<div class="flex ml-auto gap-4">
-		<button>
-			<Fa icon={faVideo} color="#ffffff" size="lg"/>
+	<div class="flex ml-auto gap-5">
+		<button on:click={() => streams[0].getVideoTracks().forEach((track) => track.enabled = !track.enabled)}>
+			<Fa icon={faVideo} color="#ffffff" scale={1.3}/>
 		</button>
-		<button>
-			<Fa icon={faMicrophone} color="#ffffff" size="lg"/>
+		<button on:click={() => streams[0].getAudioTracks().forEach((track) => track.enabled = !track.enabled)}>
+			<Fa icon={faMicrophone} color="#ffffff" scale={1.3}/>
 		</button>
-		<button>
-			<Fa icon={faDesktop} color="#ffffff" size="lg"/>
+		<button on:click={async() => {
+			let stream = await navigator.mediaDevices.getDisplayMedia({video: true});
+			let screenTrack = stream.getVideoTracks()[0];
+
+			streams[0].getVideoTracks().forEach((track) => {
+				track.stop();
+				streams[0].removeTrack(track);
+			});
+
+			streams[0].addTrack(screenTrack);
+			
+			calls.forEach((call) => {
+				call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(screenTrack));
+			});
+		}}>
+			<Fa icon={faDesktop} color="#ffffff" scale={1.3}/>
 		</button>
 		<div class="border border-gray-500"/>
 		<button>
-			<Fa icon={faComment} color="#ffffff" size="lg"/>
+			<Fa icon={faComment} color="#ffffff" scale={1.3}/>
 		</button>
 		<button>
-			<Fa icon={faUsers} color="#ffffff" size="lg"/>
+			<Fa icon={faUsers} color="#ffffff" scale={1.3}/>
 		</button>
 		<div class="border border-gray-500"/>
 		<button>
-			<Fa icon={faEllipsisV} color="#ffffff" size="lg"/>
+			<Fa icon={faEllipsisV} color="#ffffff" scale={1.2}/>
 		</button>
 	</div>
 </div>
