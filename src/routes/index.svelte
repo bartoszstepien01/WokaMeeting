@@ -3,15 +3,12 @@
 	import { base } from "$app/paths";
 	import Gallery from "$lib/Gallery.svelte";
 	import type Peer from 'peerjs';
-
-	import Fa from "svelte-fa";
-	import { faVideo, faMicrophone, faDesktop, faComment, faUsers, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
-
-	const zeroPad = (num, places) => String(num).padStart(places, '0');
+	import Navbar from "$lib/Navbar.svelte";
+	import { Source } from "$lib/Navbar.svelte";
 
 	let streams: Array<MediaStream> = [];
 	let peers: Array<string> = [];
-	let secondsSinceStart: number = 0;
+	let time: number = 0;
 	let calls: Array<Peer.MediaConnection> = [];
 
 	onMount(async() => {
@@ -34,7 +31,7 @@
 			console.log(id);
 			peers = [id];
 
-			setInterval(() => secondsSinceStart++, 1000);
+			setInterval(() => time++, 1000);
 		});
 
 		peer.on("call", (call) => {
@@ -96,46 +93,24 @@
 	</script>
 </svelte:head>
 
+<Navbar 
+	time={time}
+	on:videoswitch={() => streams[0].getVideoTracks().forEach((track) => track.enabled = !track.enabled)}
+	on:muteswitch={() => streams[0].getAudioTracks().forEach((track) => track.enabled = !track.enabled)}
+	on:sourceswitch={async(event) => {
+		let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});
+		let streamTrack = stream.getVideoTracks()[0];
 
-<div class="flex w-screen bg-gray-700 h-16 px-8 items-center">
-	<p class="text-white">{#if Math.floor(secondsSinceStart / 60) >= 60}{ zeroPad(Math.floor(secondsSinceStart / 3600), 2) }:{/if}{ zeroPad(Math.floor(secondsSinceStart / 60) % 60, 2) }:{ zeroPad(secondsSinceStart % 60, 2) }</p>
-	<div class="flex ml-auto gap-5">
-		<button on:click={() => streams[0].getVideoTracks().forEach((track) => track.enabled = !track.enabled)}>
-			<Fa icon={faVideo} color="#ffffff" scale={1.3}/>
-		</button>
-		<button on:click={() => streams[0].getAudioTracks().forEach((track) => track.enabled = !track.enabled)}>
-			<Fa icon={faMicrophone} color="#ffffff" scale={1.3}/>
-		</button>
-		<button on:click={async() => {
-			let stream = await navigator.mediaDevices.getDisplayMedia({video: true});
-			let screenTrack = stream.getVideoTracks()[0];
+		streams[0].getVideoTracks().forEach((track) => { 
+			track.stop(); 
+			streams[0].removeTrack(track); 
+		});
 
-			streams[0].getVideoTracks().forEach((track) => {
-				track.stop();
-				streams[0].removeTrack(track);
-			});
+		streams[0].addTrack(streamTrack);
 
-			streams[0].addTrack(screenTrack);
-			
-			calls.forEach((call) => {
-				call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(screenTrack));
-			});
-		}}>
-			<Fa icon={faDesktop} color="#ffffff" scale={1.3}/>
-		</button>
-		<div class="border border-gray-500"/>
-		<button>
-			<Fa icon={faComment} color="#ffffff" scale={1.3}/>
-		</button>
-		<button>
-			<Fa icon={faUsers} color="#ffffff" scale={1.3}/>
-		</button>
-		<div class="border border-gray-500"/>
-		<button>
-			<Fa icon={faEllipsisV} color="#ffffff" scale={1.2}/>
-		</button>
-	</div>
-</div>
+		calls.forEach((call) => call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(streamTrack)));
+	}}
+/>
 
 {#if streams.length !== 0}
 	<Gallery streams={streams}/>
