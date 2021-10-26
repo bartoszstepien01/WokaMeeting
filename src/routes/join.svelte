@@ -6,7 +6,7 @@
 	import Navbar from "$lib/Navbar.svelte";
 	import { Source } from "$lib/Navbar.svelte";
 
-	let streams: Array<MediaStream> = [];
+	let streams: {username: string, stream: MediaStream}[] = [];
 	let time: number = 0;
 	let peers: Array<string> = [];
 	let calls: Array<Peer.MediaConnection> = [];
@@ -15,8 +15,9 @@
 		const peerjs = await import("peerjs");
 		const Peer = peerjs.default;
 
+		let username: string = window.prompt("Enter username: ");
 		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
-		streams = [stream];
+		streams = [{ username: username, stream: stream }];
 
 		let url = new URL(window.location.href);
 		let peer = new Peer(undefined, {config: {
@@ -26,16 +27,15 @@
 			]
 		}});
 
-		let connectTo = (peerId: string) => {
-			let call = peer.call(peerId, stream);
+		let connectTo = (peerId: string, usernameParam: string = "") => {
+			let call = peer.call(peerId, stream, {metadata: {username: username}});
 
 			peers = [...peers, call.peer];
 			calls = [...calls, call];
 
 			call.on("stream", (stream) => {
-
-				if(streams.map(stream => stream.id).includes(stream.id)) return;
-				streams = [...streams, stream];
+				if(streams.map(stream => stream.stream.id).includes(stream.id)) return;
+				streams = [...streams, { username: usernameParam, stream: stream }];
 			});
 
 			return call;
@@ -52,15 +52,18 @@
 
 			connectTo(url.searchParams.get("room"));		
 
-			let conn = peer.connect(url.searchParams.get("room"));
+			let conn = peer.connect(url.searchParams.get("room"), { metadata: { username: username } });
 
 			conn.on("data", (data) => {
 				switch(data.type) {
 					case "connect":
-						connectTo(data.data.peerId);
+						connectTo(data.data.peerId, data.data.username);
 						break;
 					case "disconnect":
 						closeConnection(data.data.peerId);
+						break;
+					case "username":
+						streams[1].username = data.data.username;
 						break;
 					default:
 						break;
@@ -84,8 +87,8 @@
 			call.answer(stream);
 
 			call.on("stream", (stream) => {
-				if(streams.map(stream => stream.id).includes(stream.id)) return;
-				streams = [...streams, stream];
+				if(streams.map(stream => stream.stream.id).includes(stream.id)) return;
+				streams = [...streams, { username: call.metadata.username, stream: stream }];
 			});
 		});
 
@@ -104,18 +107,18 @@
 
 <Navbar 
 	time={time}
-	on:videoswitch={() => streams[0].getVideoTracks().forEach((track) => track.enabled = !track.enabled)}
-	on:muteswitch={() => streams[0].getAudioTracks().forEach((track) => track.enabled = !track.enabled)}
+	on:videoswitch={() => streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled)}
+	on:muteswitch={() => streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled)}
 	on:sourceswitch={async(event) => {
 		let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});
 		let streamTrack = stream.getVideoTracks()[0];
 
-		streams[0].getVideoTracks().forEach((track) => { 
+		streams[0].stream.getVideoTracks().forEach((track) => { 
 			track.stop(); 
-			streams[0].removeTrack(track); 
+			streams[0].stream.removeTrack(track); 
 		});
 
-		streams[0].addTrack(streamTrack);
+		streams[0].stream.addTrack(streamTrack);
 
 		calls.forEach((call) => call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(streamTrack)));
 	}}

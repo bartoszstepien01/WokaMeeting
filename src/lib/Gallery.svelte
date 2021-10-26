@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import Video from "./Video.svelte";
 
-  export let streams: Array<MediaStream>;
+	export let streams: {username: string, stream: MediaStream}[] = [];
   $: { 
     streams; 
     recalculateLayout(); 
