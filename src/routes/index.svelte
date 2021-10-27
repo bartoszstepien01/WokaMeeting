@@ -15,7 +15,7 @@
 		const peerjs = await import("peerjs");
 		const Peer = peerjs.default;
 
-		let username: string = window.prompt("Enter username: ");
+		let username: string = /*window.prompt("Enter username: ")*/ "DeathGuard12";
 		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 		streams = [{ username: username, stream: stream }];
 
@@ -100,25 +100,51 @@
 	</script>
 </svelte:head>
 
-<Navbar 
-	time={time}
-	on:videoswitch={() => streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled)}
-	on:muteswitch={() => streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled)}
-	on:sourceswitch={async(event) => {
-		let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});
-		let streamTrack = stream.getVideoTracks()[0];
+<div class="flex w-screen">
+	<div class="flex flex-col h-screen w-screen items-center">
+		<Navbar 
+			time={time}
+			on:videoswitch={() => streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled)}
+			on:muteswitch={() => streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled)}
+			on:sourceswitch={async(event) => {
+				let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});
+				let streamTrack = stream.getVideoTracks()[0];
 
-		streams[0].stream.getVideoTracks().forEach((track) => { 
-			track.stop(); 
-			streams[0].stream.removeTrack(track); 
-		});
+				streams[0].stream.getVideoTracks().forEach((track) => { 
+					track.stop(); 
+					streams[0].stream.removeTrack(track); 
+				});
 
-		streams[0].stream.addTrack(streamTrack);
+				streams[0].stream.addTrack(streamTrack);
 
-		calls.forEach((call) => call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(streamTrack)));
-	}}
-/>
+				calls.forEach((call) => call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(streamTrack)));
+			}}
+		/>
 
-{#if streams.length !== 0}
-	<Gallery streams={streams}/>
-{/if}
+		{#if streams.length !== 0}
+			<Gallery streams={streams}/>
+		{/if}
+	</div>
+	<div class="flex flex-col w-1/3 h-screen bg-gray-800 border-l-2 border-gray-700 px-4 pt-3 pb-8">
+		<h1 class="text-3xl text-white font-semibold mb-3">Chat</h1>
+		<div class="h-auto flex-1">
+			<div class="flex gap-2">
+				<img src="https://avatars.dicebear.com/api/initials/death guard.svg" alt="death guard" class="rounded-md w-12 h-12 mt-auto">
+				<div class="flex flex-col flex-1 gap-1">
+					<p class="text-gray-400 text-xs">death guard</p>
+					<div class="flex items-center bg-gray-600 text-white rounded-b-md rounded-tr-md flex-1 px-2 py-2">
+						<p class="">Hello!</p>
+					</div>
+					<div class="flex items-center bg-gray-600 text-white rounded-b-md rounded-tr-md flex-1 px-2 py-2">
+						<p class="">How are you?</p>
+					</div>
+					<!-- <p class=" px-4 table-cell align-middle">Hallo!</p> -->
+				</div>
+			</div>
+		</div>
+		<div class="flex gap-2">
+			<input type="text" class="w-full bg-gray-700 text-white focus:outline-none h-9 px-4 rounded-md" placeholder="Aa">
+			<button class="text-white bg-blue-600 px-4 rounded-md">Send</button>
+		</div>
+	</div>
+</div>

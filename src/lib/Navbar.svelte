@@ -17,7 +17,7 @@
 </script>
 
 
-<div class="flex w-screen bg-gray-700 h-16 px-8 items-center">
+<div class="flex w-full bg-gray-700 h-16 px-8 items-center">
 	<p class="text-white">{formatTime(time)}</p>
 	<div class="flex ml-auto gap-5">
 		<button on:click={() => dispatch("videoswitch")}>
