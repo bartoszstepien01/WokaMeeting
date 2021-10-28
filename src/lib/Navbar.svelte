@@ -7,7 +7,7 @@
 	import Fa from "svelte-fa";
 	import { faVideo, faMicrophone, faDesktop, faComment, faUsers, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 
-	export let currentSource: Source = Source.Camera;
+	let currentSource: Source = Source.Camera;
 	export let time: number = 0;
 
 	const zeroPad = (num: number, places: number) => String(num).padStart(places, '0');
@@ -33,7 +33,7 @@
 			<Fa icon={faDesktop} color="#ffffff" scale={1.3}/>
 		</button>
 		<div class="border border-gray-500"/>
-		<button>
+		<button on:click={() => dispatch("chatswitch")}>
 			<Fa icon={faComment} color="#ffffff" scale={1.3}/>
 		</button>
 		<button>
