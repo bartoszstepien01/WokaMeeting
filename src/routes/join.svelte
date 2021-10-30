@@ -5,17 +5,23 @@
 	import type Peer from 'peerjs';
 	import Navbar from "$lib/Navbar.svelte";
 	import { Source } from "$lib/Navbar.svelte";
+	import Chat from "$lib/Chat.svelte";
 
+	let chatVisible: boolean = false;
 	let streams: {username: string, stream: MediaStream}[] = [];
 	let time: number = 0;
 	let peers: Array<string> = [];
 	let calls: Array<Peer.MediaConnection> = [];
+	let messages: { author: string, message: string, id: string, me: boolean }[] = [];
+	let connection: Peer.DataConnection;
+	let username: string = "";
 
 	onMount(async() => {
 		const peerjs = await import("peerjs");
 		const Peer = peerjs.default;
 
-		let username: string = window.prompt("Enter username: ");
+		// let username: string = window.prompt("Enter username: ");
+		username = "DeathGuard12";
 		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 		streams = [{ username: username, stream: stream }];
 
@@ -65,6 +71,9 @@
 					case "username":
 						streams[1].username = data.data.username;
 						break;
+					case "message":
+						messages = [...messages, { author: streams[1].username, message: data.data.message, id: conn.peer, me: false}];
+						break;
 					default:
 						break;
 				}
@@ -77,6 +86,8 @@
 			window.onunload = window.onbeforeunload = () => {
 				conn.close();
 			}
+
+			connection = conn;
 
 			setInterval(() => time++, 1000);
 		});
@@ -105,25 +116,34 @@
 	</script>
 </svelte:head>
 
-<Navbar 
-	time={time}
-	on:videoswitch={() => streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled)}
-	on:muteswitch={() => streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled)}
-	on:sourceswitch={async(event) => {
-		let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});
-		let streamTrack = stream.getVideoTracks()[0];
+<div class="{ chatVisible ? "hidden" : "flex" } md:flex flex-col h-screen w-screen items-center">
+	<Navbar 
+		time={time}
+		on:videoswitch={() => streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled)}
+		on:muteswitch={() => streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled)}
+		on:sourceswitch={async(event) => {
+			let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});
+			let streamTrack = stream.getVideoTracks()[0];
 
-		streams[0].stream.getVideoTracks().forEach((track) => { 
-			track.stop(); 
-			streams[0].stream.removeTrack(track); 
-		});
+			streams[0].stream.getVideoTracks().forEach((track) => { 
+				track.stop(); 
+				streams[0].stream.removeTrack(track); 
+			});
 
-		streams[0].stream.addTrack(streamTrack);
+			streams[0].stream.addTrack(streamTrack);
 
-		calls.forEach((call) => call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(streamTrack)));
-	}}
-/>
+			calls.forEach((call) => call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(streamTrack)));
+		}}
+		on:chatswitch={() => chatVisible = !chatVisible}
+	/>
 
-{#if streams.length !== 0}
-	<Gallery streams={streams}/>
-{/if}
+	{#if streams.length !== 0}
+		<Gallery streams={streams} sidePanelVisible={chatVisible}/>
+	{/if}
+</div>
+
+<Chat visible={chatVisible} on:close={() => chatVisible = false} messages={messages} on:messagesend={(event) => {
+	connection.send({type: "message", data: { message: event.detail.message }});
+	
+	messages = [...messages, { author: username, message: event.detail.message, id: peers[0], me: true}];
+}}/>

@@ -11,17 +11,18 @@
 	let peers: Array<string> = [];
 	let time: number = 0;
 	let calls: Array<Peer.MediaConnection> = [];
+	let connections: Array<Peer.DataConnection> = [];
+	let messages: { author: string, message: string, id: string, me: boolean }[] = [];
 	let chatVisible: boolean = false;
+	let username: string = "";
 
 	onMount(async() => {
 		const peerjs = await import("peerjs");
 		const Peer = peerjs.default;
 
-		let username: string = /*window.prompt("Enter username: ")*/ "DeathGuard12";
+		username = /*window.prompt("Enter username: ")*/ "DeathGuard12";
 		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 		streams = [{ username: username, stream: stream }];
-
-		let connections: Array<Peer.DataConnection> = [];
 
 		let peer = new Peer(undefined, {config: {
 			iceServers: [
@@ -86,6 +87,14 @@
 				});
 			});
 
+			conn.on("data", (data) => {
+				switch(data.type) {
+					case "message":
+						messages = [...messages, { author: streams[connections.indexOf(conn)].username, message: data.data.message, id: conn.peer, me: false}];
+						break;
+				}
+			})
+
 			window.onunload = window.onbeforeunload = () => {
 				conn.close();
 			}
@@ -128,4 +137,10 @@
 	{/if}
 </div>
 
-<Chat visible={chatVisible} on:close={() => chatVisible = false} messages={[]}/>
+<Chat visible={chatVisible} on:close={() => chatVisible = false} messages={messages} on:messagesend={(event) => {
+	connections.forEach(conn => {
+		conn.send({type: "message", data: { message: event.detail.message }});
+	});
+	
+	messages = [...messages, { author: username, message: event.detail.message, id: peers[0], me: true}];
+}}/>

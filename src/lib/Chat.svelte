@@ -1,12 +1,17 @@
 <script lang="ts">
 	import Panel from "$lib/Panel.svelte";
+	import { createEventDispatcher } from "svelte";
+
+	const dispatch = createEventDispatcher();
 
 	export let visible: boolean = false;
 	export let messages: { author: string, message: string, id: string, me: boolean }[] = [];
+	let currentMessage: string = "";
 	let processedMessages: [{ author: string, message: string, id: string, me: boolean }][] = [];
 
 	$: {
 		let ids = [];
+		processedMessages = [];
 
 		messages.forEach((message) => {
 			if(ids.length == 0 || ids[ids.length - 1] != message.id) {
@@ -17,6 +22,8 @@
 
 			processedMessages[processedMessages.length - 1].push(message);
 		});
+
+		processedMessages = [...processedMessages];
 	}
 </script>
 
@@ -36,8 +43,11 @@
 			</div>
 		{/each}
 	</div>
-	<div class="flex gap-2">
-		<input type="text" class="w-full bg-gray-700 text-white focus:outline-none h-9 px-4 rounded-md" placeholder="Aa">
+	<form class="flex gap-2" on:submit|preventDefault={() => {
+		dispatch("messagesend", { message: currentMessage });
+		currentMessage = "";
+	}}>
+		<input type="text" class="w-full bg-gray-700 text-white focus:outline-none h-9 px-4 rounded-md" placeholder="Aa" bind:value={currentMessage}>
 		<button class="text-white bg-blue-600 px-4 rounded-md">Send</button>
-	</div>
+	</form>
 </Panel>
