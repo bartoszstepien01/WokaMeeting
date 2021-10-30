@@ -9,19 +9,19 @@
 
 		
 
-		<link rel="modulepreload" href="/WokaMeeting/_app/start-1bd35d25.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/vendor-f5d27702.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/start-d287ab54.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/vendor-4dd1f186.js">
 		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/paths-16c013c9.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/pages/__layout.svelte-de9ee38c.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/pages/index.svelte-bbc3455d.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/Navbar-fe9f1e27.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/pages/__layout.svelte-86e76ae1.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/pages/index.svelte-24e14c29.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/Chat-82a128d8.js">
 		<link rel="stylesheet" href="/WokaMeeting/_app/assets/start-464e9d0a.css">
 		<link rel="stylesheet" href="/WokaMeeting/_app/assets/vendor-b8c56e4e.css">
-		<link rel="stylesheet" href="/WokaMeeting/_app/assets/pages/__layout.svelte-3e25fb1a.css">
-		<link rel="stylesheet" href="/WokaMeeting/_app/assets/Navbar-668e9591.css">
+		<link rel="stylesheet" href="/WokaMeeting/_app/assets/pages/__layout.svelte-3c50ffb2.css">
+		<link rel="stylesheet" href="/WokaMeeting/_app/assets/Chat-ab368185.css">
 
 		<script type="module">
-			import { start } from "/WokaMeeting/_app/start-1bd35d25.js";
+			import { start } from "/WokaMeeting/_app/start-d287ab54.js";
 			start({
 				target: document.querySelector("#svelte"),
 				paths: {"base":"/WokaMeeting","assets":""},
@@ -34,8 +34,8 @@
 					status: 200,
 					error: null,
 					nodes: [
-						import("/WokaMeeting/_app/pages/__layout.svelte-de9ee38c.js"),
-						import("/WokaMeeting/_app/pages/index.svelte-bbc3455d.js")
+						import("/WokaMeeting/_app/pages/__layout.svelte-86e76ae1.js"),
+						import("/WokaMeeting/_app/pages/index.svelte-24e14c29.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
@@ -65,11 +65,11 @@
 
 	</div>
 
-<div class="hidden flex-col w-full h-screen bg-gray-800 border-l-2 border-gray-700 px-4 pt-3 pb-8"><div class="flex mb-3"><h1 class="text-3xl text-white font-semibold">Chat</h1>
+<div class="hidden flex-col w-full h-screen bg-gray-800 border-l-0 md:border-l-2 border-gray-700 px-4 pt-3 pb-8"><div class="flex mb-3"><h1 class="text-3xl text-white font-semibold">Chat</h1>
 		<button class="block md:hidden ml-auto"><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 352 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(176 256)" transform-origin="88 0"><g transform="translate(0,0) scale(1.3,1.3)"><path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" fill="#ffffff" transform="translate(-176 -256)"></path></g></g></svg></button></div>
 	<div class="flex flex-col h-auto flex-1 gap-6"></div>
-	<div class="flex gap-2"><input type="text" class="w-full bg-gray-700 text-white focus:outline-none h-9 px-4 rounded-md" placeholder="Aa">
-		<button class="text-white bg-blue-600 px-4 rounded-md">Send</button></div></div>
+	<form class="flex gap-2"><input type="text" class="w-full bg-gray-700 text-white focus:outline-none h-9 px-4 rounded-md" placeholder="Aa" value="">
+		<button class="text-white bg-blue-600 px-4 rounded-md">Send</button></form></div>
 
 
 
