@@ -72,7 +72,7 @@
 						streams[1].username = data.data.username;
 						break;
 					case "message":
-						messages = [...messages, { author: streams[1].username, message: data.data.message, id: conn.peer, me: false}];
+						messages = [...messages, { author: data.data.author, message: data.data.message, id: data.data.id, me: false}];
 						break;
 					default:
 						break;

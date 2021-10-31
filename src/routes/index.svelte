@@ -90,6 +90,17 @@
 			conn.on("data", (data) => {
 				switch(data.type) {
 					case "message":
+						connections.forEach((arrConn) => {
+							if(arrConn.peer == conn.peer) return;
+							arrConn.send({
+								type: "message",
+								data: {
+									author: streams[connections.indexOf(conn)].username,
+									message: data.data.message,
+									id: conn.peer
+								}
+							})
+						});
 						messages = [...messages, { author: streams[connections.indexOf(conn)].username, message: data.data.message, id: conn.peer, me: false}];
 						break;
 				}
@@ -139,8 +150,15 @@
 
 <Chat visible={chatVisible} on:close={() => chatVisible = false} messages={messages} on:messagesend={(event) => {
 	connections.forEach(conn => {
-		conn.send({type: "message", data: { message: event.detail.message }});
-	});
+		conn.send({
+			type: "message", 
+			data: { 
+				author: username,
+				message: event.detail.message,
+				id: peers[0]
+			}
+		}
+	);});
 	
 	messages = [...messages, { author: username, message: event.detail.message, id: peers[0], me: true}];
 }}/>
