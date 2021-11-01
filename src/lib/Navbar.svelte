@@ -36,7 +36,7 @@
 		<button on:click={() => dispatch("chatswitch")}>
 			<Fa icon={faComment} color="#ffffff" scale={1.3}/>
 		</button>
-		<button>
+		<button on:click={() => dispatch("membersswitch")}>
 			<Fa icon={faUsers} color="#ffffff" scale={1.3}/>
 		</button>
 		<div class="border border-gray-500"/>

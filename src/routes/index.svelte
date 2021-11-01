@@ -6,6 +6,7 @@
 	import Navbar from "$lib/Navbar.svelte";
 	import { Source } from "$lib/Navbar.svelte";
 	import Chat from "$lib/Chat.svelte";
+	import Members from "$lib/Members.svelte";
 
 	let streams: {username: string, stream: MediaStream}[] = [];
 	let peers: Array<string> = [];
@@ -14,6 +15,7 @@
 	let connections: Array<Peer.DataConnection> = [];
 	let messages: { author: string, message: string, id: string, me: boolean }[] = [];
 	let chatVisible: boolean = false;
+	let membersVisible: boolean = false;
 	let username: string = "";
 
 	onMount(async() => {
@@ -141,6 +143,7 @@
 			calls.forEach((call) => call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(streamTrack)));
 		}}
 		on:chatswitch={() => chatVisible = !chatVisible}
+		on:membersswitch={() => membersVisible = !membersVisible}
 	/>
 
 	{#if streams.length !== 0}
@@ -162,3 +165,5 @@
 	
 	messages = [...messages, { author: username, message: event.detail.message, id: peers[0], me: true}];
 }}/>
+
+<Members visible={membersVisible} users={streams}/>
