@@ -124,7 +124,7 @@
 	</script>
 </svelte:head>
 
-<div class="{ chatVisible ? "hidden" : "flex" } md:flex flex-col h-screen w-screen items-center">
+<div class="{ chatVisible || membersVisible ? "hidden" : "flex" } md:flex flex-col h-screen w-full items-center">
 	<Navbar 
 		time={time}
 		on:videoswitch={() => streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled)}
@@ -142,12 +142,18 @@
 
 			calls.forEach((call) => call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(streamTrack)));
 		}}
-		on:chatswitch={() => chatVisible = !chatVisible}
-		on:membersswitch={() => membersVisible = !membersVisible}
+		on:chatswitch={() => {
+			chatVisible = !chatVisible;
+			membersVisible = false;
+		}}
+		on:membersswitch={() => {
+			membersVisible = !membersVisible;
+			chatVisible = false;
+		}}
 	/>
 
 	{#if streams.length !== 0}
-		<Gallery streams={streams} sidePanelVisible={chatVisible}/>
+		<Gallery streams={streams} sidePanelVisible={chatVisible || membersVisible}/>
 	{/if}
 </div>
 
@@ -166,4 +172,4 @@
 	messages = [...messages, { author: username, message: event.detail.message, id: peers[0], me: true}];
 }}/>
 
-<Members visible={membersVisible} users={streams}/>
+<Members visible={membersVisible} on:close={() => membersVisible = false} users={streams}/>

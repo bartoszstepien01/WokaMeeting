@@ -21,7 +21,7 @@
     const videoCount = streams.length;
 
     const { width, height } = largestRect(
-      document.body.clientWidth - 64 - 16 * (videoCount - 1) - document.body.clientWidth * 0.2 * to_number(sidePanelVisible),
+      document.body.clientWidth - 64 - 16 * (videoCount - 1) - document.body.clientWidth * 0.25 * to_number(sidePanelVisible),
       document.body.clientHeight - 64 - 64 - 16 * (videoCount - 1),
       videoCount,
       ...aspectRatio

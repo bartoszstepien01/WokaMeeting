@@ -5,7 +5,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	import Fa from "svelte-fa";
-	import { faVideo, faMicrophone, faDesktop, faComment, faUsers, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+	import { faVideo, faMicrophone, faDesktop, faComment, faUsers, faShareAlt } from "@fortawesome/free-solid-svg-icons";
 
 	let currentSource: Source = Source.Camera;
 	export let time: number = 0;
@@ -41,7 +41,7 @@
 		</button>
 		<div class="border border-gray-500"/>
 		<button>
-			<Fa icon={faEllipsisV} color="#ffffff" scale={1.2}/>
+			<Fa icon={faShareAlt} color="#ffffff" scale={1.2}/>
 		</button>
 	</div>
 </div>
