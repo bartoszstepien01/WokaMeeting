@@ -7,22 +7,25 @@
 	import { Source } from "$lib/Navbar.svelte";
 	import Chat from "$lib/Chat.svelte";
 	import Members from "$lib/Members.svelte";
+	import Share from "$lib/Share.svelte";
 
 	let streams: {username: string, stream: MediaStream}[] = [];
 	let peers: Array<string> = [];
+	let hostID: string = "";
 	let time: number = 0;
 	let calls: Array<Peer.MediaConnection> = [];
 	let connections: Array<Peer.DataConnection> = [];
 	let messages: { author: string, message: string, id: string, me: boolean }[] = [];
 	let chatVisible: boolean = false;
 	let membersVisible: boolean = false;
+	let shareVisible: boolean = false;
 	let username: string = "";
 
 	onMount(async() => {
 		const peerjs = await import("peerjs");
 		const Peer = peerjs.default;
 
-		username = /*window.prompt("Enter username: ")*/ "DeathGuard12";
+		username = window.prompt("Enter username: ");
 		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 		streams = [{ username: username, stream: stream }];
 
@@ -34,8 +37,8 @@
 		}});
 
 		peer.on("open", (id) => {
-			console.log(id);
 			peers = [id];
+			hostID = id;
 
 			setInterval(() => time++, 1000);
 		});
@@ -97,13 +100,13 @@
 							arrConn.send({
 								type: "message",
 								data: {
-									author: streams[connections.indexOf(conn)].username,
+									author: streams[connections.indexOf(conn) + 1].username,
 									message: data.data.message,
 									id: conn.peer
 								}
 							})
 						});
-						messages = [...messages, { author: streams[connections.indexOf(conn)].username, message: data.data.message, id: conn.peer, me: false}];
+						messages = [...messages, { author: streams[connections.indexOf(conn) + 1].username, message: data.data.message, id: conn.peer, me: false}];
 						break;
 				}
 			})
@@ -124,7 +127,7 @@
 	</script>
 </svelte:head>
 
-<div class="{ chatVisible || membersVisible ? "hidden" : "flex" } md:flex flex-col h-screen w-full items-center">
+<div class="{ chatVisible || membersVisible || shareVisible ? "hidden" : "flex" } md:flex flex-col h-screen w-full items-center">
 	<Navbar 
 		time={time}
 		on:videoswitch={() => streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled)}
@@ -145,15 +148,22 @@
 		on:chatswitch={() => {
 			chatVisible = !chatVisible;
 			membersVisible = false;
+			shareVisible = false;
 		}}
 		on:membersswitch={() => {
 			membersVisible = !membersVisible;
 			chatVisible = false;
+			shareVisible = false;
+		}}
+		on:shareswitch={() => {
+			shareVisible = !shareVisible;
+			chatVisible = false;
+			membersVisible = false;
 		}}
 	/>
 
 	{#if streams.length !== 0}
-		<Gallery streams={streams} sidePanelVisible={chatVisible || membersVisible}/>
+		<Gallery streams={streams} sidePanelVisible={chatVisible || membersVisible || shareVisible}/>
 	{/if}
 </div>
 
@@ -173,3 +183,4 @@
 }}/>
 
 <Members visible={membersVisible} on:close={() => membersVisible = false} users={streams}/>
+<Share visible={shareVisible} on:close={() => shareVisible = false} id={hostID}/>

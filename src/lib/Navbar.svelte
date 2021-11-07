@@ -9,6 +9,7 @@
 
 	let currentSource: Source = Source.Camera;
 	export let time: number = 0;
+	export let peer: boolean = false;
 
 	const zeroPad = (num: number, places: number) => String(num).padStart(places, '0');
 	const formatTime = (time) => (~~(time / 60) >= 60 ? `${zeroPad(~~(time / 3600), 2)}:` : ``) + `${zeroPad(~~(time / 60) % 60, 2)}:${zeroPad(time % 60, 2)}`
@@ -39,9 +40,11 @@
 		<button on:click={() => dispatch("membersswitch")}>
 			<Fa icon={faUsers} color="#ffffff" scale={1.3}/>
 		</button>
-		<div class="border border-gray-500"/>
-		<button>
-			<Fa icon={faShareAlt} color="#ffffff" scale={1.2}/>
-		</button>
+		{#if !peer}
+			<div class="border border-gray-500"/>
+			<button on:click={() => dispatch("shareswitch")}>
+				<Fa icon={faShareAlt} color="#ffffff" scale={1.2}/>
+			</button>
+		{/if}
 	</div>
 </div>

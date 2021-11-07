@@ -22,8 +22,8 @@
 		const peerjs = await import("peerjs");
 		const Peer = peerjs.default;
 
-		// let username: string = window.prompt("Enter username: ");
-		username = "DeathGuard12";
+		username = window.prompt("Enter username: ");
+		// username = "DeathGuard12";
 		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 		streams = [{ username: username, stream: stream }];
 
@@ -144,6 +144,7 @@
 			membersVisible = !membersVisible;
 			chatVisible = false;
 		}}
+		peer={true}
 	/>
 
 	{#if streams.length !== 0}
