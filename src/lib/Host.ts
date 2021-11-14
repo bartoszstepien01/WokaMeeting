@@ -111,7 +111,7 @@ export default class Host extends EventEmitter {
 								}
 							});
 						});
-					break;
+						break;
 				}
 			});
 
