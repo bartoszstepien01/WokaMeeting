@@ -50,6 +50,9 @@
 		};
 
 		let closeConnection = (peerId: string) => {
+			console.log(streams);
+			console.log(peers);
+			console.log(calls);
 			streams = streams.filter((stream, index) => peers[index] != peerId);
 			peers = peers.filter((peer) => peer != peerId);
 			calls = calls.filter((call) => call.peer != peerId);
@@ -68,6 +71,7 @@
 						connectTo(data.data.peerId, data.data.username);
 						break;
 					case "disconnect":
+						console.log(data.data.peerId);
 						closeConnection(data.data.peerId);
 						break;
 					case "username":

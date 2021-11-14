@@ -2,118 +2,48 @@
 	import { onMount } from "svelte";
 	import { base } from "$app/paths";
 	import Gallery from "$lib/Gallery.svelte";
-	import type Peer from 'peerjs';
 	import Navbar from "$lib/Navbar.svelte";
 	import { Source } from "$lib/Navbar.svelte";
 	import Chat from "$lib/Chat.svelte";
 	import Members from "$lib/Members.svelte";
 	import Share from "$lib/Share.svelte";
-
-	let streams: {username: string, stream: MediaStream}[] = [];
-	let peers: Array<string> = [];
-	let hostID: string = "";
+	import type Host from "$lib/Host";
+	
+	let host: Host;
+	let streams: {id: string, username: string, stream: MediaStream}[] = [];
 	let time: number = 0;
-	let calls: Array<Peer.MediaConnection> = [];
-	let connections: Array<Peer.DataConnection> = [];
 	let messages: { author: string, message: string, id: string, me: boolean }[] = [];
 	let chatVisible: boolean = false;
 	let membersVisible: boolean = false;
 	let shareVisible: boolean = false;
 	let username: string = "";
+	let hostId: string = "";
 
 	onMount(async() => {
-		const peerjs = await import("peerjs");
-		const Peer = peerjs.default;
+		const hostf = await import("$lib/Host");
+		const Host = hostf.default;
 
 		username = window.prompt("Enter username: ");
 		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
-		streams = [{ username: username, stream: stream }];
+		
+		host = new Host(username, stream);
 
-		let peer = new Peer(undefined, {config: {
-			iceServers: [
-				{urls: 'stun:stun.l.google.com:19302'},
-				{urls: "turn:numb.viagenie.ca", credential: "muazkh", username: "webrtc@live.com"}
-			]
-		}});
-
-		peer.on("open", (id) => {
-			peers = [id];
-			hostID = id;
-
-			setInterval(() => time++, 1000);
+		host.on("peer", peer => {
+			if(streams.map(stream => stream.stream.id).includes(peer.stream.id)) return;
+			streams = [...streams, peer];
 		});
 
-		peer.on("call", (call) => {
-			peers = [...peers, call.peer];
-			calls = [...calls, call];
-			call.answer(stream);
-
-			call.on("stream", (stream) => {
-				if(streams.map(stream => stream.stream.id).includes(stream.id)) return;
-				streams = [...streams, { username: call.metadata.username, stream: stream }];
-			});
+		host.on("open", id => {
+			streams = [{ id: id, username: username, stream: stream }];
+			hostId = id;
 		});
 
-		peer.on("connection", (conn) => {
-			conn.on("open", () => {
-				connections.forEach((arrConn) => {
-					arrConn.send({
-						type: "connect",
-						data: {
-							peerId: conn.peer,
-							username: conn.metadata.username
-						}
-					});
-				});
+		host.on("disconnect", id => {
+			streams = streams.filter(stream => stream.id != id);
+		});
 
-				conn.send({
-					type: "username",
-					data: {
-						username: username
-					}
-				})
-
-				connections.push(conn);
-			});
-
-			conn.on("close", () => {
-				connections = connections.filter((arrConn) => arrConn != conn);
-				streams = streams.filter((stream, index) => peers[index] != conn.peer);
-				peers = peers.filter((peer) => peer != conn.peer);
-				calls = calls.filter((call) => call.peer != conn.peer);
-
-				connections.forEach((arrConn) => {
-					arrConn.send({
-						type: "disconnect",
-						data: {
-							peerId: conn.peer
-						}
-					});
-				});
-			});
-
-			conn.on("data", (data) => {
-				switch(data.type) {
-					case "message":
-						connections.forEach((arrConn) => {
-							if(arrConn.peer == conn.peer) return;
-							arrConn.send({
-								type: "message",
-								data: {
-									author: streams[connections.indexOf(conn) + 1].username,
-									message: data.data.message,
-									id: conn.peer
-								}
-							})
-						});
-						messages = [...messages, { author: streams[connections.indexOf(conn) + 1].username, message: data.data.message, id: conn.peer, me: false}];
-						break;
-				}
-			})
-
-			window.onunload = window.onbeforeunload = () => {
-				conn.close();
-			}
+		host.on("message", msg => {
+			messages = [...messages, msg];
 		});
 	});
 </script>
@@ -134,16 +64,8 @@
 		on:muteswitch={() => streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled)}
 		on:sourceswitch={async(event) => {
 			let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});
-			let streamTrack = stream.getVideoTracks()[0];
-
-			streams[0].stream.getVideoTracks().forEach((track) => { 
-				track.stop(); 
-				streams[0].stream.removeTrack(track); 
-			});
-
-			streams[0].stream.addTrack(streamTrack);
-
-			calls.forEach((call) => call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(streamTrack)));
+			
+			host.replaceStream(stream);
 		}}
 		on:chatswitch={() => {
 			chatVisible = !chatVisible;
@@ -167,20 +89,7 @@
 	{/if}
 </div>
 
-<Chat visible={chatVisible} on:close={() => chatVisible = false} messages={messages} on:messagesend={(event) => {
-	connections.forEach(conn => {
-		conn.send({
-			type: "message", 
-			data: { 
-				author: username,
-				message: event.detail.message,
-				id: peers[0]
-			}
-		}
-	);});
-	
-	messages = [...messages, { author: username, message: event.detail.message, id: peers[0], me: true}];
-}}/>
+<Chat visible={chatVisible} on:close={() => chatVisible = false} messages={messages} on:messagesend={(event) => host.send(event.detail.message)}/>
 
 <Members visible={membersVisible} on:close={() => membersVisible = false} users={streams}/>
-<Share visible={shareVisible} on:close={() => shareVisible = false} id={hostID}/>
+<Share visible={shareVisible} on:close={() => shareVisible = false} id={hostId}/>
