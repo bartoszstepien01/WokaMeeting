@@ -33,6 +33,7 @@
 
 		peer.on("open", id => {
 			streams = [{ id: id, username: username, stream: stream }];
+			setInterval(() => time++, 1000);
 		});
 
 		peer.on("disconnect", id => {

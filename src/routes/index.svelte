@@ -36,6 +36,8 @@
 		host.on("open", id => {
 			streams = [{ id: id, username: username, stream: stream }];
 			hostId = id;
+
+			setInterval(() => time++, 1000);
 		});
 
 		host.on("disconnect", id => {

@@ -5,8 +5,10 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	import Fa from "svelte-fa";
-	import { faVideo, faMicrophone, faDesktop, faComment, faUsers, faShareAlt } from "@fortawesome/free-solid-svg-icons";
+	import { faVideo, faMicrophone, faDesktop, faComment, faUsers, faShareAlt, faVideoSlash, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 
+	let cameraOn: boolean = true;
+	let audioOn: boolean = true;
 	let currentSource: Source = Source.Camera;
 	export let time: number = 0;
 	export let peer: boolean = false;
@@ -21,17 +23,23 @@
 <div class="flex w-full bg-gray-700 h-16 px-8 items-center">
 	<p class="text-white">{formatTime(time)}</p>
 	<div class="flex ml-auto gap-5">
-		<button on:click={() => dispatch("videoswitch")}>
-			<Fa icon={faVideo} color="#ffffff" scale={1.3}/>
+		<button on:click={() => {
+			cameraOn = !cameraOn;
+			dispatch("videoswitch");
+		}}>
+			<Fa icon={cameraOn ? faVideo : faVideoSlash} color="#ffffff" scale={1.3}/>
 		</button>
-		<button on:click={() => dispatch("muteswitch")}>
-			<Fa icon={faMicrophone} color="#ffffff" scale={1.3}/>
+		<button on:click={() => {
+			audioOn = !audioOn;
+			dispatch("muteswitch");
+		}}>
+			<Fa icon={audioOn ? faMicrophone : faMicrophoneSlash} color="#ffffff" scale={1.3}/>
 		</button>
 		<button class="hidden sm:block" on:click={() => {
 			currentSource = currentSource == Source.Camera ? Source.Screen : Source.Camera;
 			dispatch("sourceswitch", { source: currentSource });
 		}}>
-			<Fa icon={faDesktop} color="#ffffff" scale={1.3}/>
+			<Fa icon={faDesktop} color={currentSource == Source.Camera ? "#ffffff" : "#34d399"} scale={1.3}/>
 		</button>
 		<div class="border border-gray-500"/>
 		<button on:click={() => dispatch("chatswitch")}>

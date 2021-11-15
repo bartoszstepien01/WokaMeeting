@@ -5,7 +5,7 @@
 	export let users: { username: string }[];
 </script>
 
-<Panel title="Members" visible={visible} on:close>
+<Panel title="Participants" visible={visible} on:close>
 	<div class="flex flex-col h-auto flex-1 gap-4 mt-2">
 		{#each users as user}
 			<div class="flex gap-2 flex-row items-center">
