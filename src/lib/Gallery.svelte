@@ -9,7 +9,7 @@
   $: { 
     sidePanelVisible;
     streams;
-    recalculateLayout(); 
+    recalculateLayout();
   }
 
   let gallery: HTMLDivElement;

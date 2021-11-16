@@ -58,8 +58,14 @@
 <div class="{ chatVisible || membersVisible ? "hidden" : "flex" } md:flex flex-col h-screen w-full items-center">
 	<Navbar 
 		time={time}
-		on:videoswitch={() => streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled)}
-		on:muteswitch={() => streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled)}
+		on:videoswitch={() => {
+			streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled);
+			streams[0] = streams[0];
+		}}
+		on:muteswitch={() => {
+			streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled);
+			streams[0] = streams[0];
+		}}
 		on:sourceswitch={async(event) => {
 			let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});
 			
