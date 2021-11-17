@@ -5,7 +5,7 @@
   import Video from "./Video.svelte";
 
   export let sidePanelVisible: boolean = false;
-	export let streams: {username: string, stream: MediaStream}[] = [];
+	export let streams: {username: string, stream: MediaStream, video: boolean, audio: boolean}[] = [];
   $: { 
     sidePanelVisible;
     streams;

@@ -11,7 +11,7 @@
 	let peer: Peer;
 	let chatVisible: boolean = false;
 	let membersVisible: boolean = false;
-	let streams: {id: string, username: string, stream: MediaStream}[] = [];
+	let streams: {id: string, username: string, stream: MediaStream, video: boolean, audio: boolean}[] = [];
 	let time: number = 0;
 	let messages: { author: string, message: string, id: string, me: boolean }[] = [];
 	let username: string = "";
@@ -32,7 +32,7 @@
 		});
 
 		peer.on("open", id => {
-			streams = [{ id: id, username: username, stream: stream }];
+			streams = [{ id: id, username: username, stream: stream, video: true, audio: true }];
 			setInterval(() => time++, 1000);
 		});
 
@@ -42,6 +42,15 @@
 
 		peer.on("message", msg => {
 			messages = [...messages, msg];
+		});
+
+		peer.on("toggle", data => {
+			let stream = streams.find(stream => stream.id == data.id);
+
+			stream.video = data.video;
+			stream.audio = data.audio;
+
+			streams = streams;
 		});
 	});
 </script>
@@ -60,11 +69,13 @@
 		time={time}
 		on:videoswitch={() => {
 			streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled);
-			streams[0] = streams[0];
+			streams[0].video = !streams[0].video;
+			peer.toggleMedia(!peer.videoEnabled);
 		}}
 		on:muteswitch={() => {
 			streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled);
-			streams[0] = streams[0];
+			streams[0].audio = !streams[0].audio;
+			peer.toggleMedia(undefined, !peer.audioEnabled);
 		}}
 		on:sourceswitch={async(event) => {
 			let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});

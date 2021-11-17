@@ -11,6 +11,9 @@ export default class Peer extends EventEmitter {
 	id: string;
 	stream: MediaStream;
 
+	videoEnabled: boolean = true;
+	audioEnabled: boolean = true;
+
 	constructor(username: string, stream: MediaStream, room: string) {
 		super();
 
@@ -27,7 +30,7 @@ export default class Peer extends EventEmitter {
 			this.id = id;
 			this.emit("open", id);
 
-			let call = this.peer.call(room, stream, { metadata: { username: username } });
+			let call = this.peer.call(room, stream, { metadata: { username: username, video: this.videoEnabled, audio: this.audioEnabled } });
 
 			this.peers[room] = {
 				username: "",
@@ -38,12 +41,12 @@ export default class Peer extends EventEmitter {
 				this.hostStream = stream;
 			});
 
-			this.hostConnection = this.peer.connect(room, { metadata: { username: username } });
+			this.hostConnection = this.peer.connect(room, { metadata: { username: username, video: this.videoEnabled, audio: this.audioEnabled } });
 
 			this.hostConnection.on("data", data => {
 				switch(data.type) {
 					case "connect":
-						let call = this.peer.call(data.data.peerId, stream, { metadata: { username: username } });
+						let call = this.peer.call(data.data.peerId, stream, { metadata: { username: username, video: this.videoEnabled, audio: this.audioEnabled } });
 	
 						this.peers[data.data.peerId] = {
 							username: data.data.username,
@@ -51,16 +54,16 @@ export default class Peer extends EventEmitter {
 						};
 	
 						call.on("stream", stream => {
-							this.emit("peer", { id: call.peer, username: data.data.username, stream: stream });
+							this.emit("peer", { id: call.peer, username: data.data.username, stream: stream, video: this.videoEnabled, audio: this.audioEnabled });
 						});
 						break;
 					case "disconnect":
 						delete this.peers[data.data.peerId];
 						this.emit("disconnect", data.data.peerId);
 						break;
-					case "username":
+					case "initialization":
 						this.peers[this.hostConnection.peer].username = data.data.username;
-						this.emit("peer", { id: this.hostConnection.peer, username: data.data.username, stream: this.hostStream});
+						this.emit("peer", { id: this.hostConnection.peer, username: data.data.username, stream: this.hostStream, video: data.data.video, audio: data.data.audio });
 						break;
 					case "message":
 						this.emit("message", {
@@ -69,6 +72,9 @@ export default class Peer extends EventEmitter {
 							id: data.data.id,
 							me: false
 						});
+						break;
+					case "toggle":
+						this.emit("toggle", { id: data.data.id, video: data.data.video, audio: data.data.audio });
 						break;
 					default:
 						break;
@@ -90,7 +96,7 @@ export default class Peer extends EventEmitter {
 			call.answer(stream);
 
 			call.on("stream", peerStream => {
-				this.emit("peer", { id: call.peer, username: call.metadata.username, stream: peerStream });
+				this.emit("peer", { id: call.peer, username: call.metadata.username, stream: peerStream, video: this.videoEnabled, audio: this.audioEnabled });
 			});
 		});
 
@@ -129,6 +135,20 @@ export default class Peer extends EventEmitter {
 
 		Object.values(this.peers).map(peer => peer.media).forEach(call => {
 			call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(track));
+		});
+	}
+
+	toggleMedia(video: boolean = this.videoEnabled, audio: boolean = this.audioEnabled) {
+		this.videoEnabled = video;
+		this.audioEnabled = audio;
+
+		this.hostConnection.send({
+			type: "toggle",
+			data: {
+				id: this.peer.id,
+				video: video,
+				audio: audio
+			}
 		});
 	}
 }

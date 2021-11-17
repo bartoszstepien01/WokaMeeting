@@ -10,7 +10,7 @@
 	import type Host from "$lib/Host";
 	
 	let host: Host;
-	let streams: {id: string, username: string, stream: MediaStream}[] = [];
+	let streams: {id: string, username: string, stream: MediaStream, video: boolean, audio: boolean}[] = [];
 	let time: number = 0;
 	let messages: { author: string, message: string, id: string, me: boolean }[] = [];
 	let chatVisible: boolean = false;
@@ -34,7 +34,7 @@
 		});
 
 		host.on("open", id => {
-			streams = [{ id: id, username: username, stream: stream }];
+			streams = [{ id: id, username: username, stream: stream, video: true, audio: true }];
 			hostId = id;
 
 			setInterval(() => time++, 1000);
@@ -46,6 +46,15 @@
 
 		host.on("message", msg => {
 			messages = [...messages, msg];
+		});
+
+		host.on("toggle", data => {
+			let stream = streams.find(stream => stream.id == data.id);
+
+			stream.video = data.video;
+			stream.audio = data.audio;
+
+			streams = streams;
 		});
 	});
 </script>
@@ -64,11 +73,13 @@
 		time={time}
 		on:videoswitch={() => {
 			streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled);
-			streams[0] = streams[0];
+			streams[0].video = !streams[0].video;
+			host.toggleMedia(!host.videoEnabled);
 		}}
 		on:muteswitch={() => {
 			streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled);
-			streams[0] = streams[0];
+			streams[0].audio = !streams[0].audio;
+			host.toggleMedia(undefined, !host.audioEnabled);
 		}}
 		on:sourceswitch={async(event) => {
 			let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});

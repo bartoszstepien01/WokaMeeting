@@ -9,6 +9,9 @@ export default class Host extends EventEmitter {
 	id: string;
 	stream: MediaStream;
 
+	videoEnabled: boolean = true;
+	audioEnabled: boolean = true;
+
 	constructor(username: string, stream: MediaStream) {
 		super();
 
@@ -39,7 +42,7 @@ export default class Host extends EventEmitter {
 			call.answer(stream);
 
 			call.on("stream", peerStream => {
-				this.emit("peer", { id: call.peer, username: call.metadata.username, stream: peerStream });
+				this.emit("peer", { id: call.peer, username: call.metadata.username, stream: peerStream, video: call.metadata.video, audio: call.metadata.audio });
 			});
 		});
 
@@ -67,9 +70,11 @@ export default class Host extends EventEmitter {
 				});
 
 				conn.send({
-					type: "username",
+					type: "initialization",
 					data: {
-						username: username
+						username: username,
+						video: this.videoEnabled,
+						audio: this.audioEnabled
 					}
 				});
 			});
@@ -108,6 +113,27 @@ export default class Host extends EventEmitter {
 									author: this.peers[conn.peer].username,
 									message: data.data.message,
 									id: conn.peer
+								}
+							});
+						});
+						break;
+					case "toggle":
+						this.emit("toggle", {
+							id: conn.peer,
+							video: data.data.video,
+							audio: data.data.audio
+						});
+
+
+						Object.values(this.peers).map(peer => peer.conn).forEach(peerConn => {
+							if(peerConn.peer == conn.peer) return;
+
+							peerConn.send({
+								type: "toggle",
+								data: {
+									id: conn.peer,
+									video: data.data.video,
+									audio: data.data.audio
 								}
 							});
 						});
@@ -153,6 +179,22 @@ export default class Host extends EventEmitter {
 
 		Object.values(this.peers).map(peer => peer.media).forEach(call => {
 			call.peerConnection.getSenders().filter((sender) => sender.track.kind == "video").forEach((sender) => sender.replaceTrack(track));
+		});
+	}
+
+	toggleMedia(video: boolean = this.videoEnabled, audio: boolean = this.audioEnabled) {
+		this.videoEnabled = video;
+		this.audioEnabled = audio;
+
+		Object.values(this.peers).map(peer => peer.conn).forEach(conn => {
+			conn.send({
+				type: "toggle",
+				data: {
+					id: this.peer.id,
+					video: video,
+					audio: audio
+				}
+			});
 		});
 	}
 }
