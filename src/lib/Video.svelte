@@ -15,7 +15,7 @@
   	};
 </script>
 
-<div class="video-container bg-gray-700 rounded-xl relative" style="--width: { width }px; --height: { height }px;">
+<div class="video-container bg-gray-700 rounded-xl relative" style="--width: { width }px; --height: { height }px;" on:dblclick>
 	{#if stream.video}
 		<video autoplay muted={ muted } class="w-full h-full rounded-xl" use:srcObject={ stream.stream }>
 			<track kind="captions">

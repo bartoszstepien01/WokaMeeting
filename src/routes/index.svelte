@@ -105,7 +105,7 @@
 
 	{#if streams.length !== 0}
 		<Gallery streams={streams} sidePanelVisible={chatVisible || membersVisible || shareVisible}/>
-	{/if}
+	{/if}	
 </div>
 
 <Chat visible={chatVisible} on:close={() => chatVisible = false} messages={messages} on:messagesend={(event) => host.send(event.detail.message)}/>
