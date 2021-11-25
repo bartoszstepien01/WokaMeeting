@@ -7,6 +7,7 @@
 	import Chat from "$lib/Chat.svelte";
 	import Members from "$lib/Members.svelte";
 	import type Peer from "$lib/Peer";
+	import JoinPopup from "$lib/JoinPopup.svelte";
 
 	let peer: Peer;
 	let chatVisible: boolean = false;
@@ -14,13 +15,14 @@
 	let streams: {id: string, username: string, stream: MediaStream, video: boolean, audio: boolean}[] = [];
 	let time: number = 0;
 	let messages: { author: string, message: string, id: string, me: boolean }[] = [];
-	let username: string = "";
+	let username: string;
+	let promise: Promise<string>;
 
 	onMount(async() => {
 		const peerf = await import("$lib/Peer");
 		const Peer = peerf.default;
 
-		username = window.prompt("Enter username: ");
+		username = await promise;
 		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 
 		let url = new URL(window.location.href);
@@ -63,6 +65,10 @@
 		let parcelRequire;
 	</script>
 </svelte:head>
+
+{#if username == undefined}
+	<JoinPopup bind:promise={promise}/>
+{/if}
 
 <div class="{ chatVisible || membersVisible ? "hidden" : "flex" } md:flex flex-col h-screen w-full items-center">
 	<Navbar 

@@ -8,6 +8,7 @@
 	import Members from "$lib/Members.svelte";
 	import Share from "$lib/Share.svelte";
 	import type Host from "$lib/Host";
+	import JoinPopup from "$lib/JoinPopup.svelte";
 	
 	let host: Host;
 	let streams: {id: string, username: string, stream: MediaStream, video: boolean, audio: boolean}[] = [];
@@ -16,14 +17,15 @@
 	let chatVisible: boolean = false;
 	let membersVisible: boolean = false;
 	let shareVisible: boolean = false;
-	let username: string = "";
+	let username: string = undefined;
 	let hostId: string = "";
+	let promise: Promise<string>;
 
 	onMount(async() => {
 		const hostf = await import("$lib/Host");
 		const Host = hostf.default;
 
-		username = window.prompt("Enter username: ");
+		username = await promise;
 		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
 		
 		host = new Host(username, stream);
@@ -67,6 +69,10 @@
 		let parcelRequire;
 	</script>
 </svelte:head>
+
+{#if username == undefined}
+	<JoinPopup bind:promise={promise}/>
+{/if}
 
 <div class="{ chatVisible || membersVisible || shareVisible ? "hidden" : "flex" } md:flex flex-col h-screen w-full items-center">
 	<Navbar 
