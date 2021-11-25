@@ -5,23 +5,24 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<meta name="description" content="Decentralized P2P meeting platform">
 		<title>Home</title><link rel="icon" href="/WokaMeeting/favicon.png" data-svelte="svelte-tu3wcf"><link rel="manifest" href="/WokaMeeting/manifest.json" data-svelte="svelte-tu3wcf"><script data-svelte="svelte-tu3wcf">let parcelRequire;
+	</script><link rel="icon" href="/WokaMeeting/favicon.png" data-svelte="svelte-tu3wcf"><link rel="manifest" href="/WokaMeeting/manifest.json" data-svelte="svelte-tu3wcf"><script data-svelte="svelte-tu3wcf">let parcelRequire;
 	</script>
 
 		
 
-		<link rel="modulepreload" href="/WokaMeeting/_app/start-3855079e.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/vendor-ae9d1f21.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/start-3c437f6d.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/vendor-775b6d8d.js">
 		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/paths-16c013c9.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/pages/__layout.svelte-dc8864f7.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/pages/index.svelte-8816e7a2.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/Members-d600cbee.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/pages/__layout.svelte-0d7414c6.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/pages/index.svelte-4a56ac6f.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/JoinPopup-c71c7599.js">
 		<link rel="stylesheet" href="/WokaMeeting/_app/assets/start-464e9d0a.css">
 		<link rel="stylesheet" href="/WokaMeeting/_app/assets/vendor-b8c56e4e.css">
-		<link rel="stylesheet" href="/WokaMeeting/_app/assets/pages/__layout.svelte-64588252.css">
-		<link rel="stylesheet" href="/WokaMeeting/_app/assets/Members-78d952f5.css">
+		<link rel="stylesheet" href="/WokaMeeting/_app/assets/pages/__layout.svelte-0e7c4ec7.css">
+		<link rel="stylesheet" href="/WokaMeeting/_app/assets/JoinPopup-d8efcdf3.css">
 
 		<script type="module">
-			import { start } from "/WokaMeeting/_app/start-3855079e.js";
+			import { start } from "/WokaMeeting/_app/start-3c437f6d.js";
 			start({
 				target: document.querySelector("#svelte"),
 				paths: {"base":"/WokaMeeting","assets":""},
@@ -34,8 +35,8 @@
 					status: 200,
 					error: null,
 					nodes: [
-						import("/WokaMeeting/_app/pages/__layout.svelte-dc8864f7.js"),
-						import("/WokaMeeting/_app/pages/index.svelte-8816e7a2.js")
+						import("/WokaMeeting/_app/pages/__layout.svelte-0d7414c6.js"),
+						import("/WokaMeeting/_app/pages/index.svelte-4a56ac6f.js")
 					],
 					page: {
 						host: location.host, // TODO this is redundant
@@ -52,6 +53,11 @@
 
 
 
+
+<div class="flex absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 z-10 justify-center items-center"><div class="bg-white rounded-xl text-black px-5 py-4"><h1 class="text-4xl font-bold mb-2">Meeting</h1>
+		<hr>
+		<form><input type="text" class="bg-gray-100 rounded-md focus:outline-none px-2 py-2 w-full mt-2" placeholder="Enter your username..." autofocus>
+			<button class="bg-green-500 focus:outline-none text-white rounded-md w-full py-1 mt-2">Join</button></form></div></div>
 
 <div class="flex md:flex flex-col h-screen w-full items-center"><div class="flex w-full bg-gray-700 h-16 px-8 items-center"><p class="text-white">00:00</p>
 	<div class="flex ml-auto gap-5"><button><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 576 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(288 256)" transform-origin="144 0"><g transform="translate(0,0) scale(1.3,1.3)"><path d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z" fill="#ffffff" transform="translate(-288 -256)"></path></g></g></svg></button>
