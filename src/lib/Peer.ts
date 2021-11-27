@@ -142,6 +142,8 @@ export default class Peer extends EventEmitter {
 		this.videoEnabled = video;
 		this.audioEnabled = audio;
 
+		if(!this.hostConnection) return;
+
 		this.hostConnection.send({
 			type: "toggle",
 			data: {

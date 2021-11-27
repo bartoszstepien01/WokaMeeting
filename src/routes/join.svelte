@@ -16,17 +16,20 @@
 	let time: number = 0;
 	let messages: { author: string, message: string, id: string, me: boolean }[] = [];
 	let username: string;
-	let promise: Promise<string>;
+	let promise: Promise<{ username: string, stream: MediaStream, video: boolean, audio: boolean }>;
 
 	onMount(async() => {
 		const peerf = await import("$lib/Peer");
 		const Peer = peerf.default;
 
-		username = await promise;
-		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+		let result = await promise;
+
+		username = result.username;
+		let stream = result.stream;
 
 		let url = new URL(window.location.href);
 		peer = new Peer(username, stream, url.searchParams.get("room"));
+		peer.toggleMedia(result.video, result.audio);
 
 		peer.on("peer", peer => {
 			if(streams.map(stream => stream.stream.id).includes(peer.stream.id)) return;
@@ -34,7 +37,7 @@
 		});
 
 		peer.on("open", id => {
-			streams = [{ id: id, username: username, stream: stream, video: true, audio: true }];
+			streams = [{ id: id, username: username, stream: stream, video: result.video, audio: result.audio }];
 			setInterval(() => time++, 1000);
 		});
 

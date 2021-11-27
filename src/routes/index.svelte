@@ -19,16 +19,19 @@
 	let shareVisible: boolean = false;
 	let username: string = undefined;
 	let hostId: string = "";
-	let promise: Promise<string>;
+	let promise: Promise<{ username: string, stream: MediaStream, video: boolean, audio: boolean }>;
 
 	onMount(async() => {
 		const hostf = await import("$lib/Host");
 		const Host = hostf.default;
 
-		username = await promise;
-		let stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+		let result = await promise;
+
+		username = result.username;
+		let stream = result.stream;
 		
 		host = new Host(username, stream);
+		host.toggleMedia(result.video, result.audio);
 
 		host.on("peer", peer => {
 			if(streams.map(stream => stream.stream.id).includes(peer.stream.id)) return;
@@ -36,7 +39,7 @@
 		});
 
 		host.on("open", id => {
-			streams = [{ id: id, username: username, stream: stream, video: true, audio: true }];
+			streams = [{ id: id, username: username, stream: stream, video: result.video, audio: result.audio }];
 			hostId = id;
 
 			setInterval(() => time++, 1000);
