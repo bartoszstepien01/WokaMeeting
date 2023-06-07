@@ -4,94 +4,40 @@
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<meta name="description" content="Decentralized P2P meeting platform">
-		<title>Home</title><link rel="icon" href="/WokaMeeting/favicon.png" data-svelte="svelte-tu3wcf"><link rel="manifest" href="/WokaMeeting/manifest.json" data-svelte="svelte-tu3wcf"><script data-svelte="svelte-tu3wcf">let parcelRequire;
-	</script><link rel="icon" href="/WokaMeeting/favicon.png" data-svelte="svelte-tu3wcf"><link rel="manifest" href="/WokaMeeting/manifest.json" data-svelte="svelte-tu3wcf"><script data-svelte="svelte-tu3wcf">let parcelRequire;
-	</script>
-
 		
-
-		<link rel="modulepreload" href="/WokaMeeting/_app/start-7b6044aa.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/vendor-657f76b4.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/paths-16c013c9.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/pages/__layout.svelte-30908d69.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/pages/index.svelte-cfe5c449.js">
-		<link rel="modulepreload" href="/WokaMeeting/_app/chunks/JoinPopup-96167371.js">
-		<link rel="stylesheet" href="/WokaMeeting/_app/assets/start-464e9d0a.css">
-		<link rel="stylesheet" href="/WokaMeeting/_app/assets/vendor-b8c56e4e.css">
-		<link rel="stylesheet" href="/WokaMeeting/_app/assets/pages/__layout.svelte-39bbe4c8.css">
-		<link rel="stylesheet" href="/WokaMeeting/_app/assets/JoinPopup-d8efcdf3.css">
-
-		<script type="module">
-			import { start } from "/WokaMeeting/_app/start-7b6044aa.js";
-			start({
-				target: document.querySelector("#svelte"),
-				paths: {"base":"/WokaMeeting","assets":""},
-				session: {},
-				host: location.host,
-				route: true,
-				spa: false,
-				trailing_slash: "never",
-				hydrate: {
-					status: 200,
-					error: null,
-					nodes: [
-						import("/WokaMeeting/_app/pages/__layout.svelte-30908d69.js"),
-						import("/WokaMeeting/_app/pages/index.svelte-cfe5c449.js")
-					],
-					page: {
-						host: location.host, // TODO this is redundant
-						path: "\u002F",
-						query: new URLSearchParams(""),
-						params: {}
-					}
-				}
-			});
-		</script>
+		<link rel="modulepreload" href="/WokaMeeting/_app/immutable/entry/start.2912f079.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/immutable/chunks/index.5227cc00.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/immutable/chunks/singletons.bc21d564.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/immutable/chunks/paths.d05d3c9a.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/immutable/entry/app.b3e63aa5.js">
+		<link rel="modulepreload" href="/WokaMeeting/_app/immutable/chunks/preload-helper.41c905a7.js">
 	</head>
 	<body class="bg-gray-800 h-screen no-scrollbar">
 		<div id="svelte" class="flex items-center w-screen h-screen">
+			<script>
+				{
+					__sveltekit_1n0yefu = {
+						assets: "/WokaMeeting",
+						base: "/WokaMeeting",
+						env: {}
+					};
 
+					const element = document.currentScript.parentElement;
 
+					Promise.all([
+						import("/WokaMeeting/_app/immutable/entry/start.2912f079.js"),
+						import("/WokaMeeting/_app/immutable/entry/app.b3e63aa5.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
 
-
-<div class="flex absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 z-10 justify-center items-center"><div class="bg-white rounded-xl text-black px-5 py-4"><h1 class="text-4xl font-bold mb-2">Meeting</h1>
-		<hr>
-		<form class="flex flex-col gap-2 mt-2"><input type="text" class="bg-gray-100 rounded-md focus:outline-none p-2 w-full" placeholder="Enter your username..." autofocus>
-			<select class="bg-gray-100 rounded-md focus:outline-none p-2 w-full appearance-none text-gray-400"><option disabled hidden selected>Select video input...</option><option value="">Disabled</option></select>
-			<select class="bg-gray-100 rounded-md focus:outline-none p-2 w-full appearance-none text-gray-400"><option disabled hidden selected>Select audio input...</option><option value="">Disabled</option></select>
-			<button class="bg-green-500 focus:outline-none text-white rounded-md w-full py-1">Join</button></form></div></div>
-
-<div class="flex md:flex flex-col h-screen w-full items-center"><div class="flex w-full bg-gray-700 h-16 px-8 items-center"><p class="text-white">00:00</p>
-	<div class="flex ml-auto gap-5"><button><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 576 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(288 256)" transform-origin="144 0"><g transform="translate(0,0) scale(1.3,1.3)"><path d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z" fill="#ffffff" transform="translate(-288 -256)"></path></g></g></svg></button>
-		<button><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 352 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(176 256)" transform-origin="88 0"><g transform="translate(0,0) scale(1.3,1.3)"><path d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z" fill="#ffffff" transform="translate(-176 -256)"></path></g></g></svg></button>
-		<button class="hidden sm:block"><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 576 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(288 256)" transform-origin="144 0"><g transform="translate(0,0) scale(1.3,1.3)"><path d="M528 0H48C21.5 0 0 21.5 0 48v320c0 26.5 21.5 48 48 48h192l-16 48h-72c-13.3 0-24 10.7-24 24s10.7 24 24 24h272c13.3 0 24-10.7 24-24s-10.7-24-24-24h-72l-16-48h192c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm-16 352H64V64h448v288z" fill="#ffffff" transform="translate(-288 -256)"></path></g></g></svg></button>
-		<div class="border border-gray-500"></div>
-		<button><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 512 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(256 256)" transform-origin="128 0"><g transform="translate(0,0) scale(1.3,1.3)"><path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32z" fill="#ffffff" transform="translate(-256 -256)"></path></g></g></svg></button>
-		<button><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 640 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(320 256)" transform-origin="160 0"><g transform="translate(0,0) scale(1.3,1.3)"><path d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z" fill="#ffffff" transform="translate(-320 -256)"></path></g></g></svg></button>
-		<div class="border border-gray-500"></div>
-			<button><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 448 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(224 256)" transform-origin="112 0"><g transform="translate(0,0) scale(1.2,1.2)"><path d="M352 320c-22.608 0-43.387 7.819-59.79 20.895l-102.486-64.054a96.551 96.551 0 0 0 0-41.683l102.486-64.054C308.613 184.181 329.392 192 352 192c53.019 0 96-42.981 96-96S405.019 0 352 0s-96 42.981-96 96c0 7.158.79 14.13 2.276 20.841L155.79 180.895C139.387 167.819 118.608 160 96 160c-53.019 0-96 42.981-96 96s42.981 96 96 96c22.608 0 43.387-7.819 59.79-20.895l102.486 64.054A96.301 96.301 0 0 0 256 416c0 53.019 42.981 96 96 96s96-42.981 96-96-42.981-96-96-96z" fill="#ffffff" transform="translate(-224 -256)"></path></g></g></svg></button></div></div>
-
-	</div>
-
-<div class="hidden flex-col w-full md:w-[25vw] h-screen bg-gray-800 border-l-0 md:border-l-2 border-gray-700 px-4 pt-3 pb-8"><div class="flex mb-3"><h1 class="text-3xl text-white font-semibold">Chat</h1>
-		<button class="block md:hidden ml-auto"><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 352 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(176 256)" transform-origin="88 0"><g transform="translate(0,0) scale(1.3,1.3)"><path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" fill="#ffffff" transform="translate(-176 -256)"></path></g></g></svg></button></div>
-	<div class="flex flex-col h-auto flex-1 gap-6"></div>
-	<form class="flex gap-2"><input type="text" class="w-full bg-gray-700 text-white focus:outline-none h-9 px-4 rounded-md" placeholder="Aa" value="">
-		<button class="text-white bg-blue-600 px-4 rounded-md">Send</button></form></div>
-
-<div class="hidden flex-col w-full md:w-[25vw] h-screen bg-gray-800 border-l-0 md:border-l-2 border-gray-700 px-4 pt-3 pb-8"><div class="flex mb-3"><h1 class="text-3xl text-white font-semibold">Participants</h1>
-		<button class="block md:hidden ml-auto"><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 352 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(176 256)" transform-origin="88 0"><g transform="translate(0,0) scale(1.3,1.3)"><path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" fill="#ffffff" transform="translate(-176 -256)"></path></g></g></svg></button></div>
-	<div class="flex flex-col h-auto flex-1 gap-4 mt-2"></div></div>
-<div class="hidden flex-col w-full md:w-[25vw] h-screen bg-gray-800 border-l-0 md:border-l-2 border-gray-700 px-4 pt-3 pb-8"><div class="flex mb-3"><h1 class="text-3xl text-white font-semibold">Share</h1>
-		<button class="block md:hidden ml-auto"><svg id="" class="fa svelte-1lmliyu" style="height:1em;vertical-align:-.125em;transform-origin:center;overflow:visible" viewBox="0 0 352 512" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg"><g transform="translate(176 256)" transform-origin="88 0"><g transform="translate(0,0) scale(1.3,1.3)"><path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" fill="#ffffff" transform="translate(-176 -256)"></path></g></g></svg></button></div>
-	<div class="flex flex-col h-auto flex-1 gap-9 mt-2"><div class="flex flex-col gap-2"><h1 class="text-white text-xl">Scan QR code</h1>
-			<img class="p-2" src="http://api.qrserver.com/v1/create-qr-code/?data=&format=svg&color=ffffff&bgcolor=1f2937" alt=""></div>
-		<div class="flex flex-col gap-2"><h1 class="text-white text-xl">Enter URL</h1>
-			<p class="bg-gray-700 rounded-md text-white px-2 py-1"></p></div></div></div>
-
-
-
-			
+					if ('serviceWorker' in navigator) {
+						addEventListener('load', function () {
+							navigator.serviceWorker.register('/WokaMeeting/service-worker.js');
+						});
+					}
+				}
+			</script>
 		</div>
 	</body>
 </html>
