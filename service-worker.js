@@ -1,24 +1,24 @@
 const s = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), r = [
-  s + "/_app/immutable/entry/app.b3e63aa5.js",
+  s + "/_app/immutable/entry/app.a70d04c5.js",
   s + "/_app/immutable/assets/0.96710f24.css",
   s + "/_app/immutable/nodes/0.edf5da86.js",
-  s + "/_app/immutable/nodes/1.2c0164d0.js",
-  s + "/_app/immutable/nodes/2.881badaa.js",
-  s + "/_app/immutable/nodes/3.5c68efb4.js",
+  s + "/_app/immutable/nodes/1.ffc7e3e3.js",
+  s + "/_app/immutable/nodes/2.7a782958.js",
+  s + "/_app/immutable/nodes/3.8dd5fcf0.js",
   s + "/_app/immutable/assets/JoinPopup.c6583623.css",
   s + "/_app/immutable/chunks/JoinPopup.de206de2.js",
   s + "/_app/immutable/chunks/index.5227cc00.js",
   s + "/_app/immutable/chunks/index.fda93153.js",
-  s + "/_app/immutable/chunks/paths.d05d3c9a.js",
+  s + "/_app/immutable/chunks/paths.c23ad93a.js",
   s + "/_app/immutable/chunks/preload-helper.41c905a7.js",
-  s + "/_app/immutable/chunks/singletons.bc21d564.js",
-  s + "/_app/immutable/entry/start.2912f079.js",
+  s + "/_app/immutable/chunks/singletons.92f98157.js",
+  s + "/_app/immutable/entry/start.d40100af.js",
   s + "/_app/immutable/chunks/Host.b11e34c8.js",
   s + "/_app/immutable/chunks/Peer.cd9d1252.js"
 ], m = [
   s + "/favicon.png",
   s + "/manifest.json"
-], o = "1686175828456", c = self, p = `cache${o}`, h = r.concat(m), u = new Set(h);
+], o = "1686176752525", c = self, p = `cache${o}`, h = r.concat(m), u = new Set(h);
 c.addEventListener("install", (e) => {
   e.waitUntil(
     caches.open(p).then((t) => t.addAll(h)).then(() => {
