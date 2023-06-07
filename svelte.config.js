@@ -15,9 +15,7 @@ const config = {
 
 	kit: {
 		// hydrate the <div id="svelte"> element in src/app.html
-		adapter: static_adapter({
-			fallback: 'index.html',
-		}),
+		adapter: static_adapter({}),
 		paths: {
 			base: dev ? '' : '/WokaMeeting'
 		}
