@@ -6,54 +6,50 @@
 	import { Source } from "$lib/Navbar.svelte";
 	import Chat from "$lib/Chat.svelte";
 	import Members from "$lib/Members.svelte";
-	import Share from "$lib/Share.svelte";
-	import type Host from "$lib/Host";
+	import type Peer from "$lib/Peer";
 	import JoinPopup from "$lib/JoinPopup.svelte";
-	
-	let host: Host;
+
+	let peer: Peer;
+	let chatVisible: boolean = false;
+	let membersVisible: boolean = false;
 	let streams: {id: string, username: string, stream: MediaStream, video: boolean, audio: boolean}[] = [];
 	let time: number = 0;
 	let messages: { author: string, message: string, id: string, me: boolean }[] = [];
-	let chatVisible: boolean = false;
-	let membersVisible: boolean = false;
-	let shareVisible: boolean = false;
-	let username: string = undefined;
-	let hostId: string = "";
+	let username: string;
 	let promise: Promise<{ username: string, stream: MediaStream, video: boolean, audio: boolean }>;
 
 	onMount(async() => {
-		const hostf = await import("$lib/Host");
-		const Host = hostf.default;
+		const peerf = await import("$lib/Peer");
+		const Peer = peerf.default;
 
 		let result = await promise;
 
 		username = result.username;
 		let stream = result.stream;
-		
-		host = new Host(username, stream);
-		host.toggleMedia(result.video, result.audio);
 
-		host.on("peer", peer => {
+		let url = new URL(window.location.href);
+		peer = new Peer(username, stream, url.searchParams.get("room"));
+		peer.toggleMedia(result.video, result.audio);
+
+		peer.on("peer", peer => {
 			if(streams.map(stream => stream.stream.id).includes(peer.stream.id)) return;
 			streams = [...streams, peer];
 		});
 
-		host.on("open", id => {
+		peer.on("open", id => {
 			streams = [{ id: id, username: username, stream: stream, video: result.video, audio: result.audio }];
-			hostId = id;
-
 			setInterval(() => time++, 1000);
 		});
 
-		host.on("disconnect", id => {
+		peer.on("disconnect", id => {
 			streams = streams.filter(stream => stream.id != id);
 		});
 
-		host.on("message", msg => {
+		peer.on("message", msg => {
 			messages = [...messages, msg];
 		});
 
-		host.on("toggle", data => {
+		peer.on("toggle", data => {
 			let stream = streams.find(stream => stream.id == data.id);
 
 			stream.video = data.video;
@@ -67,7 +63,7 @@
 <svelte:head>
 	<link rel="icon" href="{ base }/favicon.png" />
 	<link rel="manifest" href="{ base }/manifest.json">
-	<title>Home</title>
+	<title>WokaMeeting</title>
 	<script>
 		let parcelRequire;
 	</script>
@@ -77,47 +73,40 @@
 	<JoinPopup bind:promise={promise}/>
 {/if}
 
-<div class="{ chatVisible || membersVisible || shareVisible ? "hidden" : "flex" } md:flex flex-col h-screen w-full items-center">
+<div class="{ chatVisible || membersVisible ? "hidden" : "flex" } md:flex flex-col h-screen w-full items-center">
 	<Navbar 
 		time={time}
 		on:videoswitch={() => {
 			streams[0].stream.getVideoTracks().forEach((track) => track.enabled = !track.enabled);
 			streams[0].video = !streams[0].video;
-			host.toggleMedia(!host.videoEnabled);
+			peer.toggleMedia(!peer.videoEnabled);
 		}}
 		on:muteswitch={() => {
 			streams[0].stream.getAudioTracks().forEach((track) => track.enabled = !track.enabled);
 			streams[0].audio = !streams[0].audio;
-			host.toggleMedia(undefined, !host.audioEnabled);
+			peer.toggleMedia(undefined, !peer.audioEnabled);
 		}}
 		on:sourceswitch={async(event) => {
 			let stream = event.detail.source == Source.Screen ? await navigator.mediaDevices.getDisplayMedia({video: true}) : await navigator.mediaDevices.getUserMedia({video: true});
 			
-			host.replaceStream(stream);
+			peer.replaceStream(stream);
 		}}
 		on:chatswitch={() => {
 			chatVisible = !chatVisible;
 			membersVisible = false;
-			shareVisible = false;
 		}}
 		on:membersswitch={() => {
 			membersVisible = !membersVisible;
 			chatVisible = false;
-			shareVisible = false;
 		}}
-		on:shareswitch={() => {
-			shareVisible = !shareVisible;
-			chatVisible = false;
-			membersVisible = false;
-		}}
+		peer={true}
 	/>
 
 	{#if streams.length !== 0}
-		<Gallery streams={streams} sidePanelVisible={chatVisible || membersVisible || shareVisible}/>
-	{/if}	
+		<Gallery streams={streams} sidePanelVisible={chatVisible || membersVisible}/>
+	{/if}
 </div>
 
-<Chat visible={chatVisible} on:close={() => chatVisible = false} messages={messages} on:messagesend={(event) => host.send(event.detail.message)}/>
+<Chat visible={chatVisible} on:close={() => chatVisible = false} messages={messages} on:messagesend={(event) => peer.send(event.detail.message)}/>
 
 <Members visible={membersVisible} on:close={() => membersVisible = false} users={streams}/>
-<Share visible={shareVisible} on:close={() => shareVisible = false} id={hostId}/>

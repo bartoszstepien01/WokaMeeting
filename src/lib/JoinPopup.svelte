@@ -13,24 +13,29 @@
 	});
 
 	onMount(() => {
-		mediaDevicesPromise = navigator.mediaDevices.enumerateDevices();
+		navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+			stream.getTracks().forEach(track => {
+				track.stop();
+			});
+			mediaDevicesPromise = navigator.mediaDevices.enumerateDevices();
+		}).catch(() => {
+			alert('Camera and microphone permissions are required for app to work!');
+		});
+		
 	});
 </script>
 
 <div class="flex absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 z-10 justify-center items-center">
 	<div class="bg-white rounded-xl text-black px-5 py-4">
-		<h1 class="text-4xl font-bold mb-2">Meeting</h1>
+		<h1 class="text-4xl font-bold mb-2">WokaMeeting</h1>
 		<hr>
 		<form class="flex flex-col gap-2 mt-2" on:submit|preventDefault={async () => {
 			if(videoDevice == undefined || audioDevice == undefined) return;
 
 			let stream = await navigator.mediaDevices.getUserMedia({ 
-				video: videoDevice == "" ? true : { deviceId: videoDevice }, 
-				audio: audioDevice == "" ? true : { deviceId: audioDevice } 
+				video: videoDevice == "" ? false : { deviceId: videoDevice }, 
+				audio: audioDevice == "" ? false : { deviceId: audioDevice } 
 			});
-
-			if(videoDevice == "") stream.getVideoTracks().forEach(track => track.enabled = false);
-			if(audioDevice == "") stream.getAudioTracks().forEach(track => track.enabled = false);
 
 			promiseResolve({
 				username: username,
