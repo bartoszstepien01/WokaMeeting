@@ -9,6 +9,11 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  TURN_SERVER: ${{ secrets.TURN_SERVER }}
+  TURN_USERNAME: ${{ secrets.TURN_USERNAME }}
+  TURN_CREDENTIAL: ${{ secrets.TURN_CREDENTIAL }}
+
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -20,7 +20,7 @@ export default class Host extends EventEmitter {
 		this.peer = new Peer(undefined, {config: {
 			iceServers: [
 				{urls: 'stun:stun.l.google.com:19302'},
-				{urls: "turn:numb.viagenie.ca", credential: "muazkh", username: "webrtc@live.com"}
+				{urls: process.env.TURN_SERVER, credential: process.env.TURN_CREDENTIAL, username: process.env.TURN_USERNAME}
 			]
 		}});
 
