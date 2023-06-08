@@ -1,5 +1,6 @@
 import Peer from "peerjs";
 import { EventEmitter } from "eventemitter3";
+import { TURN_SERVER, TURN_USERNAME, TURN_CREDENTIAL } from '$env/static/private';
 
 export default class Host extends EventEmitter {
 	peer: Peer;
@@ -20,7 +21,7 @@ export default class Host extends EventEmitter {
 		this.peer = new Peer(undefined, {config: {
 			iceServers: [
 				{urls: 'stun:stun.l.google.com:19302'},
-				{urls: process.env.TURN_SERVER, credential: process.env.TURN_CREDENTIAL, username: process.env.TURN_USERNAME}
+				{urls: TURN_SERVER, credential: TURN_CREDENTIAL, username: TURN_USERNAME}
 			]
 		}});
 
