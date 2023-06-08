@@ -1,6 +1,6 @@
 import Peer from "peerjs";
 import { EventEmitter } from "eventemitter3";
-import { PUBLIC_TURN_SERVER, PUBLIC_TURN_USERNAME, PUBLIC_TURN_CREDENTIAL } from '$env/static/private';
+import { PUBLIC_TURN_SERVER, PUBLIC_TURN_USERNAME, PUBLIC_TURN_CREDENTIAL } from '$env/static/public';
 
 export default class Host extends EventEmitter {
 	peer: Peer;
