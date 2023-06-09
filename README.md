@@ -3,6 +3,12 @@
 A decentralised P2P meeting platform
 
 https://bartoszstepien01.github.io/WokaMeeting
+## Features
+
+- Real-time P2P video chat
+- Full decentralisation
+- Works as Progressive Web App
+- Text chat
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
