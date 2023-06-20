@@ -11,7 +11,7 @@
     ],
     "background_color": "#1f2937",
     "display": "standalone",
-    "scope": "/",
+    "scope": "/WokaMeeting/",
     "theme_color": "#FF9800",
     "description": "Decentralized P2P meeting platform"
 }
